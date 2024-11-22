@@ -1,27 +1,12 @@
-CONFIG=~/.config/nvim
+source fn.sh || exit 1
 
-if [ -e $CONFIG ]; then
-  if [ -z $remove_existing ]; then
-    read -p "nvim config already exists. Remove to install LazyVim? (y/n)" remove_existing
-  fi
-  case $remove_existing in
-  [yY])
-    echo "Removing $CONFIG..."
-    rm -rf $CONFIG
-    LOCAL_SHARE=~/.local/share/nvim
-    LOCAL_STATE=~/.local/state/nvim
-    CACHE=~/.cache/nvim
-    echo "Removing $LOCAL_SHARE, $LOCAL_STATE, $CACHE..."
-    rm -rf $LOCAL_SHARE
-    rm -rf $LOCAL_STATE
-    rm -rf $CACHE;;
-  [nN]) exit 0 ;;
-  *) echo "Invalid response"; exit 0 ;;
-  esac
-fi
+maybe_remove ~/.config/nvim
+maybe_remove ~/.local/share/nvim
+maybe_remove ~/.local/state/nvim
+maybe_remove ~/.cache/nvim
 
-git clone https://github.com/LazyVim/starter $CONFIG
-rm -rf $CONFIG/.git
+git clone https://github.com/LazyVim/starter ~/.config/nvim --depth 1
+rm -rf ~/.config/nvim/.git
 
 nvim
 
