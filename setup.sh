@@ -15,7 +15,7 @@ function usage {
 while [ $# -gt 0 ]; do
   if [[ $1 == "--help" ]]; then
     usage
-    exit 0
+    return 0
   elif [[ $1 == "--"* ]]; then
     v="${1/--/}"
     declare "$v"="$2"
@@ -32,9 +32,8 @@ bash misc/*.sh
 
 bash nvim/0_nvim.sh
 bash nvim/1_lazygit.sh
+bash nvim/ripgrep.sh
 bash nvim/2_lazyvim.sh
 
-# Sourcing
-source ~/.bashrc
-source ~/.inputrc
-source ~/.vimrc
+
+source source.sh

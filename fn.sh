@@ -1,3 +1,4 @@
+# Path
 ROOTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 function rootdir {
   echo $ROOTDIR
@@ -5,6 +6,8 @@ function rootdir {
 function datadir {
   echo $ROOTDIR/data
 }
+
+# Global
 function die {
     printf "Script failed: %s\n\n" "$1"
     exit 1
@@ -20,7 +23,8 @@ function maybe_ask_preset_envvar {
   fi
 }
 
-# Privacy
+
+# Private
 function password_check {
   if [ ! $password ]; then
     read -s -p "Type in the password for private keys and repos:" password && echo \n
@@ -36,6 +40,8 @@ function decrypt {
   echo "$(cat $1 | openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:$password)"
 }
 
+
+# Files
 function maybe_remove {
   file=$1
   if [ -e $file ]; then
@@ -51,7 +57,13 @@ function maybe_remove {
     esac
   fi
 }
-
+function curl_tar_and_extract {
+  link=$1
+  filename=$(basename $link)
+  curl -LO $link
+  tar xf $filename
+  rm -f $filename
+}
 function rc_append {
   file=$1
   content=$2
