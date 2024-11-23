@@ -9,5 +9,3 @@ mv lazygit_${lazygit_ver}_Linux_x86_64 lazygit
 mkdir -p ~/.bin
 install lazygit -D -t ~/.bin
 rm -f lazygit
-
-rc_append ~/.bashrc "PATH=\$PATH:~/.bin"

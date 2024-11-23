@@ -7,7 +7,7 @@ function datadir {
   echo $ROOTDIR/data
 }
 
-# Global
+# Bash utils
 function die {
     printf "Script failed: %s\n\n" "$1"
     exit 1
@@ -22,7 +22,7 @@ function maybe_ask_preset_envvar {
     export $envvar=$value
   fi
 }
-
+function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # Private
 function password_check {

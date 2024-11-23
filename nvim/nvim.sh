@@ -7,4 +7,4 @@ curl_tar_and_extract https://github.com/neovim/neovim/releases/download/v0.10.0/
 
 mv nvim-linux64 ~/.nvim
 
-rc_append ~/.bashrc "PATH=\$PATH:~/.nvim/bin"
+rc_append ~/.bashrc "PATH=~/.nvim/bin:\$PATH"

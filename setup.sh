@@ -28,12 +28,15 @@ password_check
 maybe_ask_preset_envvar remove_existing
 
 # Installation
+mkdir -p ~/.bin
+cp bin/* ~/.bin/
+rc_append ~/.bashrc "PATH=~/.bin:\$PATH"
+
 bash misc/*.sh
 
-bash nvim/0_nvim.sh
-bash nvim/1_lazygit.sh
+bash nvim/nvim.sh
+bash nvim/git.sh
+bash nvim/lazygit.sh
 bash nvim/ripgrep.sh
-bash nvim/2_lazyvim.sh
-
-
-source source.sh
+bash nvim/fd.sh
+bash nvim/lazyvim.sh
