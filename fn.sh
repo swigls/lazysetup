@@ -60,8 +60,14 @@ function maybe_remove {
 function curl_tar_and_extract {
   link=$1
   filename=$(basename $link)
+  target_dir=$2
   curl -LO $link
-  tar xf $filename
+  if [[ $target_dir ]]; then
+    mkdir -p $target_dir
+    tar xf $filename -C $target_dir/
+  else
+    tar xf $filename
+  fi
   rm -f $filename
 }
 function rc_append {
