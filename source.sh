@@ -1,3 +1,3 @@
 source ~/.bashrc
-source ~/.inputrc
+bind -f ~/.inputrc
 source ~/.vimrc
