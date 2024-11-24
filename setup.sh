@@ -10,6 +10,7 @@ rc_append ~/.bashrc "PATH=~/.bin:\$PATH"
 
 bash configure/*.sh
 
+bash install/miniconda.sh
 bash install/nvim.sh
 bash install/git.sh
 bash install/lazygit.sh
