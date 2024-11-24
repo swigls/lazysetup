@@ -73,6 +73,7 @@ function curl_tar_and_extract {
 function rc_append {
   file=$1
   content=$2
+  touch $file
   if [[ $(cat $file) == *"$content"* ]]; then
     echo "Skip: $file already contains \"$content\""
   else
