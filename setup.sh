@@ -8,11 +8,11 @@ mkdir -p ~/.bin
 cp bin/* ~/.bin/
 rc_append ~/.bashrc "PATH=~/.bin:\$PATH"
 
-bash misc/*.sh
+bash configure/*.sh
 
-bash nvim/nvim.sh
-bash nvim/git.sh
-bash nvim/lazygit.sh
-bash nvim/ripgrep.sh
-bash nvim/fd.sh
-bash nvim/lazyvim.sh
+bash install/nvim.sh
+bash install/git.sh
+bash install/lazygit.sh
+bash install/ripgrep.sh
+bash install/fd.sh
+bash install/lazyvim.sh

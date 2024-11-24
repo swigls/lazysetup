@@ -77,6 +77,5 @@ function rc_append {
     echo "Skip: $file already contains \"$content\""
   else
     echo $content >> $file
-    source $file
   fi
 }
