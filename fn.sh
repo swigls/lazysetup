@@ -53,7 +53,7 @@ function maybe_remove {
         echo "Removing $file ..."
         rm -rf $file;;
       [nN] ) exit 0;;
-      * ) echo "Invalid response"; exit 0 ;;
+      * ) echo "Invalid response"; exit 1 ;;
     esac
     remove_existing=
   fi
