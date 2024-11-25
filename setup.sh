@@ -10,7 +10,7 @@ rc_append ~/.bashrc "PATH=~/.bin:\$PATH"
 
 bash install/git.sh
 
-source source.sh
+source ~/.bashrc
 bash configure/*.sh
 
 bash install/miniconda.sh

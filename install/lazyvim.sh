@@ -8,7 +8,7 @@ maybe_remove ~/.cache/nvim
 git clone https://github.com/LazyVim/starter ~/.config/nvim --depth 1
 rm -rf ~/.config/nvim/.git
 
-source source.sh
+source ~/.bashrc
 nvim
 
 # Post Install
