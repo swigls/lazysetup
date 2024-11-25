@@ -2,5 +2,5 @@
 
 logdir=$1
 
-tensorboard --logdir $logdir --port 0.0.0.0
+tensorboard --logdir $logdir --host 0.0.0.0
 
