@@ -1,0 +1,3 @@
+## INSTALLATION
+
+$ bash setup.sh

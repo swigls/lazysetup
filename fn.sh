@@ -55,6 +55,7 @@ function maybe_remove {
       [nN] ) exit 0;;
       * ) echo "Invalid response"; exit 0 ;;
     esac
+    remove_existing=
   fi
 }
 function curl_tar_and_extract {
