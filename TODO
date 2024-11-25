@@ -2,3 +2,5 @@
 
 - Maybe_remove not working properly
   - rename: maybe_remove_or_exit ?
+
+- why no 'bind ...' in .bashrc?
