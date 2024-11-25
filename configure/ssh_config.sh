@@ -12,4 +12,6 @@ echo \
   AddKeysToAgent yes" > ~/.ssh/config
 
 decrypt $(datadir)/id_ed25519 > ~/.ssh/id_ed25519
+chmod 400 id_ed25519
+
 decrypt $(datadir)/id_ed25519.pub > ~/.ssh/id_ed25519.pub
