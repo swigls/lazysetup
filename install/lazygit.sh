@@ -9,4 +9,4 @@ mv lazygit_tmp/lazygit ~/.bin/
 rm -rf lazygit_tmp
 
 mkdir -p ~/.config/lazygit
-touch ~/.config/lazygit/config.yaml
+touch ~/.config/lazygit/config.yml
