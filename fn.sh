@@ -1,5 +1,5 @@
 # Path
-ROOTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+ROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 function rootdir {
   echo $ROOTDIR
 }
@@ -9,8 +9,8 @@ function datadir {
 
 # Bash utils
 function die {
-    printf "Script failed: %s\n\n" "$1"
-    exit 1
+  printf "Script failed: %s\n\n" "$1"
+  exit 1
 }
 function maybe_ask_preset_envvar {
   envvar=$1
@@ -40,7 +40,6 @@ function decrypt {
   echo "$(cat $1 | openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:$password)"
 }
 
-
 # Files
 function maybe_remove {
   file=$1
@@ -49,11 +48,15 @@ function maybe_remove {
       read -p "$file already exists. Remove to Proceed? (y/n)" remove_existing
     fi
     case $remove_existing in
-      [yY] )
-        echo "Removing $file ..."
-        rm -rf $file;;
-      [nN] ) exit 0;;
-      * ) echo "Invalid response"; exit 1 ;;
+    [yY])
+      echo "Removing $file ..."
+      rm -rf $file
+      ;;
+    [nN]) exit 0 ;;
+    *)
+      echo "Invalid response"
+      exit 1
+      ;;
     esac
     remove_existing=
   fi
@@ -78,6 +81,6 @@ function rc_append {
   if [[ $(cat $file) == *"$content"* ]]; then
     echo "Skip: $file already contains \"$content\""
   else
-    echo $content >> $file
+    echo "$content" >>$file
   fi
 }
