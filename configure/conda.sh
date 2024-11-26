@@ -7,6 +7,7 @@ act_fn='function act {
   if [[ $not_exist ]]; then
     read -p "No \"$envname\" environment, thus creating it. Which Python version? " python_version
     conda create -n $envname python==$python_version pip setuptools
+    conda activate $envname
   fi
 }'
 deact_fn='function deact {
