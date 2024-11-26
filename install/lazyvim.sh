@@ -11,5 +11,4 @@ rm -rf ~/.config/nvim/.git
 source ~/.bashrc
 nvim
 
-# Post Install
-#   Recommended to execute `:LazyHealth`
+configure/lazyvim.sh
