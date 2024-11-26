@@ -2,6 +2,7 @@ source fn.sh || exit 1
 
 password_check
 
+git config pull.rebase false
 
 email=$(decrypt $(datadir)/git/global_user.email)
 git config --global user.email "$email"
