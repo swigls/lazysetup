@@ -1,0 +1,12 @@
+#!/bin/bash
+
+remote=$1
+outdir=$2
+
+[ -z $outdir ] && outdir=$(basename $remote)
+
+git clone git@github.com:$remote $outdir
+
+cd $outdir
+git config pull.rebase false
+
