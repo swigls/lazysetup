@@ -1,7 +1,6 @@
 source fn.sh || exit 1
 
-act_fn='
-function act {
+act_fn='function act {
   envname=$(basename $(git rev-parse --show-toplevel))
   not_exist=
   conda activate $envname || not_exist=1
