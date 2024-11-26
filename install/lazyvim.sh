@@ -11,4 +11,4 @@ rm -rf ~/.config/nvim/.git
 source ~/.bashrc
 nvim
 
-configure/lazyvim.sh
+configure/lazyvim_color.sh
