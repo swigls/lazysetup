@@ -7,3 +7,6 @@ curl_tar_and_extract "https://github.com/jesseduffield/lazygit/releases/download
 mkdir -p ~/.bin
 mv lazygit_tmp/lazygit ~/.bin/
 rm -rf lazygit_tmp
+
+mkdir -p ~/.config/lazygit
+touch ~/.config/lazygit/config.yaml
