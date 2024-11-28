@@ -13,19 +13,21 @@ function die {
   exit 1
 }
 function maybe_ask_preset_envvar {
-  envvar=$1
-  if [ ${!envvar} ]; then
+  ENVVAR=$1
+  description=$2
+  if [ ${!ENVVAR} ]; then
     return 0
   fi
-  read -p "Type in the preset the value of \"$envvar\" (empty for non-preset):" value
+  read -p "Type in the preset the value of \"$ENVVAR\" ($2): " value
   if [ $value ]; then
-    export $envvar=$value
+    export $ENVVAR=$value
   fi
 }
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # Private
 function password_check {
+  password=$PASSWORD
   if [ ! $password ]; then
     read -s -p "Type in the password for private keys and repos:" password && echo \n
   fi
@@ -34,17 +36,18 @@ function password_check {
     echo "Password incorrect."
     exit 1
   fi
-  export password=$password
+  export PASSWORD=$password
 }
 function decrypt {
   echo "$(cat $1 | openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:$password)"
 }
 
 # Files
-function maybe_remove {
+function remove_or_exit {
   file=$1
   if [ -e $file ]; then
-    if [ -z $remove_existing ]; then
+    remove_existing=$REMOVE_EXISTING
+    if [ ! $REMOVE_EXISTING ]; then
       read -p "$file already exists. Remove to Proceed? (y/n)" remove_existing
     fi
     case $remove_existing in
@@ -58,7 +61,6 @@ function maybe_remove {
       exit 1
       ;;
     esac
-    remove_existing=
   fi
 }
 function curl_tar_and_extract {

@@ -1,6 +1,6 @@
 source fn.sh || exit 1
 
-maybe_remove ~/.bin/lazygit
+remove_or_exit ~/.bin/lazygit
 
 curl_tar_and_extract "https://github.com/jesseduffield/lazygit/releases/download/v0.44.1/lazygit_0.44.1_Linux_x86_64.tar.gz" lazygit_tmp
 

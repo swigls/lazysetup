@@ -1,3 +1,4 @@
+source ~/.bashrc
 source fn.sh || exit 1
 
 password_check
@@ -10,4 +11,4 @@ git config --global user.email "$email"
 name=$(decrypt $(datadir)/git/global_user.name)
 git config --global user.name "$name"
 
-git remote set-url origin "git@github.com:swigls/lazysetup" 
+git remote set-url origin "git@github.com:swigls/lazysetup"
