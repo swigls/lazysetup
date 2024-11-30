@@ -76,13 +76,17 @@ function curl_tar_and_extract {
   fi
   rm -f $filename
 }
-function rc_append {
+function rc_append_line {
   file=$1
   content=$2
   touch $file
-  if [[ $(cat $file) == *"$content"* ]]; then
-    echo "Skip: $file already contains \"$content\""
+  if [[ $UNINSTALL ]]; then
+    sed -i "/^$content$/d" $file
   else
-    echo "$content" >>$file
+    if [[ $(cat $file) == *"$content"* ]]; then
+      echo "Skip: $file already contains \"$content\""
+    else
+      echo "$content" >>$file
+    fi
   fi
 }

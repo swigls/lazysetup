@@ -13,5 +13,5 @@ act_fn='function act {
 deact_fn='function deact {
   conda deactivate
 }'
-rc_append ~/.bashrc "$act_fn"
-rc_append ~/.bashrc "$deact_fn"
+rc_append_line ~/.bashrc "$act_fn"
+rc_append_line ~/.bashrc "$deact_fn"

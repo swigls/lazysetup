@@ -13,4 +13,4 @@ make prefix=~/.bin/git install
 
 rm -rf git-2.47.0
 
-rc_append ~/.bashrc "PATH=~/.bin/git:\$PATH"
+rc_append_line ~/.bashrc "PATH=~/.bin/git:\$PATH"
