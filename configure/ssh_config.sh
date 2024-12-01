@@ -1,7 +1,5 @@
 source fn.sh || exit 1
 
-password_check
-
 remove_or_exit $(installdir)/.ssh
 
 mkdir -p $(installdir)/.ssh

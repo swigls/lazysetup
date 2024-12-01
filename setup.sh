@@ -1,13 +1,14 @@
 source fn.sh || exit 1
 
 password_check
-maybe_ask_preset_envvar UNINSTALL 'for install, return with empty.'
-[ $UNINSTALL ] REMOVE_EXISTING=Y
-maybe_ask_preset_envvar REMOVE_EXISTING 'y/Y (yes) or n/N (no)'
+uninstall_check GLOBAL
 
 ## Installation
-# misc
+# init
 bash configure/init.sh
+[[ $(is_uninstall) ]] && rm -rf $(installdir) && exit 0
+
+# misc
 bash configure/no_beep.sh
 bash configure/tmux.sh
 bash configure/ssh_config.sh
