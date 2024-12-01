@@ -6,6 +6,9 @@ function rootdir {
 function datadir {
   echo $ROOTDIR/data
 }
+function installdir {
+  echo ~/.lazysetup
+}
 
 # Bash utils
 function die {
@@ -40,6 +43,24 @@ function password_check {
 }
 function decrypt {
   echo "$(cat $1 | openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:$password)"
+}
+
+# Git
+function git_config_global {
+  var=$1
+  value=$2
+  if [[ $UNINSTALL ]]; then
+    git config --global --unset $var
+  else
+    git config --global $var $value
+  fi
+}
+function git_remote_set_url {
+  if [[ $UNINSTALL ]]; then
+    git remote set-url origin "https://github.com/swigls/lazysetup"
+  else
+    git remote set-url origin "git@github.com:swigls/lazysetup"
+  fi
 }
 
 # Files
@@ -79,9 +100,11 @@ function curl_tar_and_extract {
 function rc_append_line {
   file=$1
   content=$2
+  mkdir -p $(dirname $file)
   touch $file
   if [[ $UNINSTALL ]]; then
     sed -i "/^$content$/d" $file
+    return 1
   else
     if [[ $(cat $file) == *"$content"* ]]; then
       echo "Skip: $file already contains \"$content\""
@@ -89,4 +112,13 @@ function rc_append_line {
       echo "$content" >>$file
     fi
   fi
+}
+function lazy_rc_append_line {
+  rcfile=$1
+  content=$2
+  if [[ ! $rcfile == "$(installdir)"* ]]; then
+    tgt_rcfile=$(installdir)/$rcfile
+  fi
+  echo $tgt_rcfile
+  rc_append_line $rcfile
 }

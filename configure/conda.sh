@@ -1,5 +1,7 @@
 source fn.sh || exit 1
 
+remove_or_exit $(installdir)/fn.sh
+
 act_fn='function act {
   envname=$(basename $(git rev-parse --show-toplevel))
   not_exist=
@@ -13,5 +15,6 @@ act_fn='function act {
 deact_fn='function deact {
   conda deactivate
 }'
-rc_append_line ~/.bashrc "$act_fn"
-rc_append_line ~/.bashrc "$deact_fn"
+rc_append_line $(installdir)/fn.sh "$act_fn"
+rc_append_line $(installdir)/fn.sh "$deact_fn"
+rc_append_line $(installdir)/.bashrc "source $(installdir)/fn.sh"
