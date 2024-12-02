@@ -3,10 +3,16 @@ source fn.sh || exit 1
 password_check
 uninstall_check GLOBAL
 
+## uninstall
+if [[ $UNINSTALL ]]; then
+  bash configure/init.sh
+  bash configure/git.sh
+  rm -rf $(installdir)
+  exit 0
+fi
 ## Installation
 # init
 bash configure/init.sh
-[[ $(is_uninstall) ]] && rm -rf $(installdir) && exit 0
 
 # misc
 bash configure/no_beep.sh
