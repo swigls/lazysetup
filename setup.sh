@@ -33,4 +33,5 @@ bash install/nvim.sh
 bash install/lazygit.sh
 bash install/ripgrep.sh
 bash install/fd.sh
+bash install/npm.sh
 bash install/lazyvim.sh
