@@ -11,4 +11,4 @@ rm -rf lazygit_tmp
 touch $(installdir)/lazygit/config.yml
 
 rc_append_line $(installdir)/.bashrc "export PATH=$(installdir)/lazygit/bin":'$PATH'
-rc_append_line $(installdir)/.bashrc "export LD_CONFIG_FILE=$(installdir)/lazygit/config.yml"
+rc_append_line $(installdir)/.bashrc "export CONFIG_DIR=$(installdir)/lazygit"
