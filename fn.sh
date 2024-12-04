@@ -54,7 +54,7 @@ function uninstall_check {
 # Privacy
 function password_check {
   [ $PASSWORD ] && return 0
-  read -s -p "Type in the password for private keys and repos: " password && echo \n
+  read -s -p $'Type in the password for private keys and repos: \n' password
   export PASSWORD=$password
   check_result=$(decrypt $(datadir)/password)
   if [[ ! $check_result == correct ]]; then
