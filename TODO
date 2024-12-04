@@ -1,1 +1,2 @@
 - telescope -> fzf-lua
+- "update" feature (reinstall only when a script is changed)
