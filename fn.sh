@@ -1,10 +1,7 @@
 # Path
-ROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 function rootdir {
+  ROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
   echo $ROOTDIR
-}
-function datadir {
-  echo $ROOTDIR/data
 }
 function installdir {
   echo ~/.lazysetup
@@ -56,7 +53,7 @@ function password_check {
   [ $PASSWORD ] && return 0
   read -s -p $'Type in the password for private keys and repos: \n' password
   export PASSWORD=$password
-  check_result=$(decrypt $(datadir)/password)
+  check_result=$(decrypt data/password)
   if [[ ! $check_result == correct ]]; then
     echo "Password incorrect."
     exit 1
