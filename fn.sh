@@ -26,19 +26,14 @@ function maybe_ask_preset_envvar {
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 function uninstall_check {
   [[ $INSTALL || $UNINSTALL ]] && return 0
-  desc='Type in i/I for install, u/U for uninstall'
-  if [[ $1 == 'GLOBAL' ]]; then
-    desc=${desc}' (empty for no global preset)'
-  else
-    existing_file=$1
-    desc=${desc}" ('$existing_file' will be uninstalled)"
-  fi
-  read -p "${desc}: " install_option
+  existing_file=$1
+  desc="Type in i[install] or u[uninstall] ()('$existing_file' will be uninstalled)"
+  read -rp "${desc}: " install_option
   case $install_option in
-  [iI])
+  [iI] | install | INSTALL)
     export INSTALL=1
     ;;
-  [uU])
+  [uU] | uninstall | UNINSTALL)
     export UNINSTALL=1
     ;;
   *)

@@ -1,15 +1,26 @@
 source fn.sh || exit 1
 
-password_check
-uninstall_check GLOBAL
+if [[ $1 ]]; then
+  case $1 in
+  # u or U or uninstall or UNINSTALL
+  [uU] | uninstall | UNINSTALL) export UNINSTALL=1 ;;
+  [iI] | install | INSTALL) export INSTALL=1 ;;
+  *)
+    echo "Invalid argument: $1"
+    echo "First argument means global set for installation. It must be either i(install) or u(uninstall) or empty"
+    exit 1
+    ;;
+  esac
+fi
 
-## uninstall
+## Uninstallation
 if [[ $UNINSTALL ]]; then
   bash configure/init.sh
   bash configure/git.sh
-  rm -rf $(installdir)
+  rm -rf "$(installdir)"
   exit 0
 fi
+
 ## Installation
 # init
 bash configure/init.sh
