@@ -1,8 +1,4 @@
 # Path
-function rootdir {
-  ROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-  echo $ROOTDIR
-}
 function installdir {
   echo ~/.lazysetup
 }
