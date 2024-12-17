@@ -1,3 +1,1 @@
 - "update" feature (reinstall only when a script is changed)
-- "act $ENVNAME"
-- Copilot completion key: return -> tab?
