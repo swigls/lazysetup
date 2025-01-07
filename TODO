@@ -1,1 +1,2 @@
-- "update" feature (reinstall only when a script is changed)
+- "lazyupdate" 
+- "gpu" 
