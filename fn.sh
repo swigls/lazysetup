@@ -30,8 +30,8 @@ function uninstall_check {
 
 # Privacy
 function password_check {
-  [ $PASSWORD ] && return 0
-  read -s -p $'Type in the password for private keys and repos: \n' password
+  [ "$PASSWORD" ] && return 0
+  read -rs -p $'Type in the password for private keys and repos: \n' password
   export PASSWORD=$password
   check_result=$(decrypt data/password)
   if [[ ! $check_result == correct ]]; then
@@ -40,8 +40,8 @@ function password_check {
   fi
 }
 function decrypt {
-  [ ! $PASSWORD ] && password_check
-  echo "$(cat $1 | openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:$PASSWORD)"
+  [ ! "$PASSWORD" ] && password_check
+  openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:"$PASSWORD" <"$1"
 }
 
 # Git
@@ -49,9 +49,9 @@ function git_config_global {
   var=$1
   value=$2
   if [[ $UNINSTALL ]]; then
-    git config --global --unset $var
+    git config --global --unset "$var"
   else
-    git config --global $var $value
+    git config --global "$var" "$value"
   fi
 }
 function git_remote_set_url {
@@ -65,15 +65,15 @@ function git_remote_set_url {
 # Files
 function remove_or_exit {
   file=$1
-  if [ -e $file ]; then
+  if [ -e "$file" ]; then
     remove_existing=$REMOVE_EXISTING
-    if [ ! $REMOVE_EXISTING ]; then
-      read -p "$file already exists. Remove to Proceed? (y/n)" remove_existing
+    if [ ! "$REMOVE_EXISTING" ]; then
+      read -rp "$file already exists. Remove to Proceed? (y/n)" remove_existing
     fi
     case $remove_existing in
     [yY])
       echo "Removing $file ..."
-      rm -rf $file
+      rm -rf "$file"
       ;;
     [nN]) exit 0 ;;
     *)
@@ -85,33 +85,34 @@ function remove_or_exit {
 }
 function curl_tar_and_extract {
   link=$1
-  filename=$(basename $link)
+  filename=$(basename "$link")
   target_dir=$2
-  curl -LO $link
+  curl -LO "$link"
   if [[ $target_dir ]]; then
-    mkdir -p $target_dir
-    tar xf $filename -C $target_dir/
+    mkdir -p "$target_dir"
+    tar xf "$filename" -C "$target_dir"/
   else
-    tar xf $filename
+    tar xf "$filename"
   fi
-  rm -f $filename
+  rm -f "$filename"
 }
 function rc_append_line {
   file=$1
   content=$2
-  mkdir -p $(dirname $file)
-  touch $file
+  filedir=$(dirname "$file")
+  mkdir -p "$filedir"
+  touch "$file"
   if [[ $UNINSTALL ]]; then
-    if [[ $(cat $file) == *"$content"* ]]; then
-      awk -v pattern="$content" '$0 != pattern' $file >temp && mv temp $file
+    if [[ $(cat "$file") == *"$content"* ]]; then
+      awk -v pattern="$content" '$0 != pattern' "$file" >temp && mv temp "$file"
       echo "Removed \"$content\" from $file"
       return 1
     fi
   else
-    if [[ $(cat $file) == *"$content"* ]]; then
+    if [[ $(cat "$file") == *"$content"* ]]; then
       echo "Skip: $file already contains \"$content\""
     else
-      echo "$content" >>$file
+      echo "$content" >>"$file"
     fi
   fi
 }
