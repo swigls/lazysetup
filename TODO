@@ -1,3 +1,4 @@
 - "lazyupdate" 
 - "gpu" 
 - Ask before autolint?
+- venv select or error solve
