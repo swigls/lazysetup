@@ -1,21 +1,19 @@
 return {
 	"linux-cultist/venv-selector.nvim",
-  branch = "regexp", -- Use this branch for the new version
-  cmd = "VenvSelect",
-  enabled = function()
-    return LazyVim.has("telescope.nvim")
-  end,
-  opts = {
-    settings = {
-      options = {
-        notify_user_on_venv_activation = true,
-        anaconda_base_path = "~/.lazysetup/conda/",
-        anaconda_envs_path = "~/.lazysetup/conda/envs/",
-        search_workspace = false,
-      },
-    },
-  },
-  --  Call config for python files and load the cached venv automatically
-  ft = "python",
-  keys = { { "<leader>cv", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" } },
+	opts = {
+		settings = {
+			search = {
+				anaconda_envs = {
+					command = "fd bin/python$ ~/.lazysetup/conda/envs --full-path --color never -E /proc", -- change path here to your anaconda envs
+				},
+				-- anaconda_base = {
+				-- 	command = "fd /python$ ~/.lazysetup/conda --full-path --color never -E /proc", -- change path here to your anaconda base
+				-- },
+			},
+			options = {
+				notify_user_on_venv_activation = false,
+				search_workspace = false,
+			},
+		},
+	},
 }
