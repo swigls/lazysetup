@@ -28,7 +28,7 @@ bash configure/init.sh
 # misc
 bash configure/no_beep.sh
 bash configure/tmux.sh
-bash configure/ssh_config.sh
+bash configure/ssh.sh
 bash install/bin.sh
 
 # git
@@ -39,10 +39,13 @@ bash configure/git.sh
 bash install/conda.sh
 bash configure/conda.sh
 
-# nvim & lazyvim
+# requirements for lazyvim
 bash install/nvim.sh
 bash install/lazygit.sh
 bash install/ripgrep.sh
 bash install/fd.sh
 bash install/npm.sh
+
+# lazyvim
 bash install/lazyvim.sh
+bash configure/lazyvim.sh
