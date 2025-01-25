@@ -1,3 +1,5 @@
+# Echo for source
+echo "[$0]"
 # Path
 function installdir {
   echo ~/.lazysetup
