@@ -29,7 +29,7 @@ bash configure/init.sh
 bash configure/no_beep.sh
 bash configure/tmux.sh
 bash configure/ssh.sh
-bash install/bin.sh
+bash install/exe.sh
 
 # git
 bash install/git.sh
@@ -37,7 +37,6 @@ bash configure/git.sh
 
 # conda
 bash install/conda.sh
-bash configure/conda.sh
 
 # requirements for lazyvim
 bash install/nvim.sh
