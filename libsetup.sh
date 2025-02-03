@@ -1,12 +1,6 @@
 source lib.sh || exit 1
 # Echo for source
 echo "[$0]"
-# Bash utils
-function die {
-  printf "Script failed: %s\n\n" "$1"
-  exit 1
-}
-function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # Privacy
 function password_check {
