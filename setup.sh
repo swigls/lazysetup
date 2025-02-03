@@ -1,5 +1,4 @@
 #!/bin/bash
-source fn.sh || exit 1
 
 # init
 bash configure/init.sh
