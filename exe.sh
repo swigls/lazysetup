@@ -16,10 +16,14 @@ function tb {
 }
 
 # Installation-related functions
+}
 function lazyuninstall {
-  bash configure/init.sh
-  bash configure/git.sh
-  rm -rf "$(installdir)"
+  (
+    export UNINSTALL=1
+    bash configure/init.sh
+    bash configure/git.sh
+    rm -rf "$(installdir)"
+  )
 }
 
 # Conda-related functions
