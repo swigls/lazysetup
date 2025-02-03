@@ -11,24 +11,6 @@ function die {
   exit 1
 }
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
-function uninstall_check {
-  [[ $INSTALL || $UNINSTALL ]] && return 0
-  existing_file=$1
-  desc="Type in i[install] or u[uninstall] ()('$existing_file' will be uninstalled)"
-  read -rp "${desc}: " install_option
-  case $install_option in
-  [iI] | install | INSTALL)
-    export INSTALL=1
-    ;;
-  [uU] | uninstall | UNINSTALL)
-    export UNINSTALL=1
-    ;;
-  *)
-    echo "Invalid response"
-    exit 1
-    ;;
-  esac
-}
 
 # Privacy
 function password_check {
