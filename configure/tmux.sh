@@ -1,4 +1,4 @@
-source fn.sh || exit 1
+source libsetup.sh || exit 1
 
 rc_append_line $(installdir)/.tmux.conf "set-option -sg escape-time 10"
 rc_append_line $(installdir)/.tmux.conf "set-option -g focus-events on"

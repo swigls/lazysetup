@@ -1,4 +1,4 @@
-source fn.sh || exit 1
+source libsetup.sh || exit 1
 
 # Plugins
 for filepath in data/lazyvim/plugins/*; do

@@ -1,4 +1,4 @@
-source exe.sh || exit 1
+source lib.sh || exit 1
 # Echo for source
 echo "[$0]"
 # Bash utils

@@ -1,4 +1,4 @@
-source fn.sh || exit 1
+source libsetup.sh || exit 1
 
 # nvm
 remove_or_exit $(installdir)/xdg_base/.config/nvm

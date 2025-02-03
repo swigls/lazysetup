@@ -1,4 +1,4 @@
-source fn.sh || exit 1
+source libsetup.sh || exit 1
 
 command -v git &&
   [[ $(version "$(git --version | cut -d" " -f3)") -gt $(version 2.19.0) ]] &&

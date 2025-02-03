@@ -1,5 +1,5 @@
 source ~/.bashrc
-source fn.sh || exit 1
+source libsetup.sh || exit 1
 
 git_config_global pull.rebase false
 

@@ -1,4 +1,4 @@
-source fn.sh || exit 1
+source libsetup.sh || exit 1
 
 rc_append_line $(installdir)/.bashrc "bind -f ~/.inputrc"
 rc_append_line $(installdir)/.inputrc "set bell-style none"
