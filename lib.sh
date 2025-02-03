@@ -1,5 +1,5 @@
 # Path
-function installdir {
+function lazysetup_root {
   echo ~/.lazysetup
 }
 
