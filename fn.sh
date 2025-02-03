@@ -1,10 +1,6 @@
+source exe.sh || exit 1
 # Echo for source
 echo "[$0]"
-# Path
-function installdir {
-  echo ~/.lazysetup
-}
-
 # Bash utils
 function die {
   printf "Script failed: %s\n\n" "$1"

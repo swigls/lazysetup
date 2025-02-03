@@ -1,3 +1,9 @@
+# Path
+function installdir {
+  echo ~/.lazysetup
+}
+
+# Shortcuts
 function clone {
   remote=$1
   outdir=$2
