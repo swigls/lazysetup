@@ -50,10 +50,7 @@ function git_remote_set_url {
 function remove_or_exit {
   file=$1
   if [ -e "$file" ]; then
-    remove_existing=$REMOVE_EXISTING
-    if [ ! "$REMOVE_EXISTING" ]; then
-      read -rp "$file already exists. Remove to Proceed? (y/n)" remove_existing
-    fi
+    read -rp "$file already exists. Remove to Proceed? (y/n)" remove_existing
     case $remove_existing in
     [yY])
       echo "Removing $file ..."
