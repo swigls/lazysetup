@@ -85,7 +85,7 @@ function lazysourcerc {
   fi
   source ~/.bashrc
   if [ "$conda_env" ]; then
-    conda activate "$conda_env"
+    act "$conda_env"
   fi
 }
 function lazyinstall_single {
