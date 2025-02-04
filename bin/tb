@@ -1,6 +1,0 @@
-#!/bin/bash
-
-logdir=$1
-
-tensorboard --logdir $logdir --host 0.0.0.0
-

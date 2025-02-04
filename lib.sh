@@ -67,6 +67,11 @@ INSTALL_SCRIPTS=(
   "install/lazyvim.sh"
   "configure/lazyvim.sh"
 )
+function lazycd {
+  tgtdir=$1
+  mkdir -p "$tgtdir"
+  cd "$tgtdir" || exit 1
+}
 function lazysourcerc {
   # Re-source the bashrc while keeping the current conda environment
   if command -v conda >/dev/null 2>&1; then
@@ -87,7 +92,7 @@ function lazyinstall_single {
 }
 function lazyupdate {
   (
-    cd "$(lazysetup_root)" || exit 1
+    lazycd "$(lazysetup_root)"
     # If git is not installed, install it
     if ! command -v git >/dev/null 2>&1; then
       lazyinstall_single "install/git.sh"

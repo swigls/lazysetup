@@ -1,6 +1,6 @@
 source libsetup.sh || exit 1
 
-mkdir -p "$(lazysetup_root)"
+mkdir -p "$(lazysetup_root)"/bin
 
 rc_append_line ~/.bashrc "source $(lazysetup_root)/.bashrc" && touch "$(lazysetup_root)/.bashrc"
 rc_append_line ~/.inputrc '$include '"$(lazysetup_root)/.inputrc" && touch "$(lazysetup_root)/.inputrc"

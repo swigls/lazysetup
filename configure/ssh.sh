@@ -13,8 +13,8 @@ echo \
 decrypt data/ssh/id_ed25519 >$(lazysetup_root)/.ssh/id_ed25519
 chmod 400 $(lazysetup_root)/.ssh/id_ed25519
 
-decrypt datadir/ssh/id_ed25519.pub >$(lazysetup_root)/.ssh/id_ed25519.pub
-decrypt datadir/ssh/id_ed25519.pub >$(lazysetup_root)/.ssh/authorized_keys
+decrypt data/ssh/id_ed25519.pub >$(lazysetup_root)/.ssh/id_ed25519.pub
+decrypt data/ssh/id_ed25519.pub >$(lazysetup_root)/.ssh/authorized_keys
 
 rc_append_line $(lazysetup_root)/.bashrc "export SSH_CONFIG_FILE=$(lazysetup_root)/.ssh/config"
 rc_append_line $(lazysetup_root)/.bashrc "export GIT_SSH_COMMAND='ssh -F $(lazysetup_root)/.ssh/config'"
