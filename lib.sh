@@ -48,24 +48,24 @@ INSTALL_SCRIPTS=(
   # init
   "configure/init.sh"
   # misc
-  "bash configure/no_beep.sh"
-  "bash configure/tmux.sh"
-  "bash configure/ssh.sh"
-  "bash install/exe.sh"
+  "configure/no_beep.sh"
+  "configure/tmux.sh"
+  "configure/ssh.sh"
+  "install/exe.sh"
   # git
-  "bash install/git.sh"
-  "bash configure/git.sh"
+  "install/git.sh"
+  "configure/git.sh"
   # conda
-  "bash install/conda.sh"
+  "install/conda.sh"
   # requirements for lazyvim
-  "bash install/nvim.sh"
-  "bash install/lazygit.sh"
-  "bash install/ripgrep.sh"
-  "bash install/fd.sh"
-  "bash install/npm.sh"
+  "install/nvim.sh"
+  "install/lazygit.sh"
+  "install/ripgrep.sh"
+  "install/fd.sh"
+  "install/npm.sh"
   # lazyvim
-  "bash install/lazyvim.sh"
-  "bash configure/lazyvim.sh"
+  "install/lazyvim.sh"
+  "configure/lazyvim.sh"
 )
 function lazysourcerc {
   # Re-source the bashrc while keeping the current conda environment
