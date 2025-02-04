@@ -139,7 +139,9 @@ function lazyuninstall {
   arg=$1
   [[ $arg == "no_cd" ]] && export NO_CD=1
   (
-    [[ ! $NO_CD ]] && cd "$(lazysetup_root)" || exit 1
+    if [[ ! $NO_CD ]]; then
+      cd "$(lazysetup_root)" || exit 1
+    fi
     export UNINSTALL=1
     for script in $UNINSTALL_SCRIPTS; do
       lazyinstall_single "$script"
