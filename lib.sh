@@ -51,7 +51,7 @@ INSTALL_SCRIPTS=(
   "configure/no_beep.sh"
   "configure/tmux.sh"
   "configure/ssh.sh"
-  "install/exe.sh"
+  "install/lib.sh"
   # git
   "install/git.sh"
   "configure/git.sh"
