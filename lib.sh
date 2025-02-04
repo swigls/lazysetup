@@ -136,8 +136,10 @@ function lazyupdate {
   ) && lazysourcerc # Re-source the bashrc if changes are made
 }
 function lazyuninstall {
+  arg=$1
+  [[ $arg == "no_cd" ]] && export NO_CD=1
   (
-    cd "$(lazysetup_root)" || exit 1
+    [[ ! $NO_CD ]] && cd "$(lazysetup_root)" || exit 1
     export UNINSTALL=1
     for script in $UNINSTALL_SCRIPTS; do
       lazyinstall_single "$script"
