@@ -67,6 +67,10 @@ INSTALL_SCRIPTS=(
   "install/lazyvim.sh"
   "configure/lazyvim.sh"
 )
+UNINSTALL_SCRIPTS=(
+  "configure/init.sh"
+  "configure/git.sh"
+)
 function lazycd {
   tgtdir=$1
   mkdir -p "$tgtdir"
@@ -135,8 +139,9 @@ function lazyuninstall {
   (
     cd "$(lazysetup_root)" || exit 1
     export UNINSTALL=1
-    bash configure/init.sh
-    bash configure/git.sh
+    for script in $UNINSTALL_SCRIPTS; do
+      lazyinstall_single "$script"
+    done
     rm -rf "$(lazysetup_root)"
   )
 }

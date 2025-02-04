@@ -1,3 +1,9 @@
 #!/bin/bash
 source libsetup.sh || exit 1
-lazyupdate
+
+arg=$1
+if [[ $arg == "uninstall" ]]; then
+  lazyuninstall
+else
+  lazyupdate
+fi

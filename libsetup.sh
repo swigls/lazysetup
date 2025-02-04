@@ -17,6 +17,7 @@ function decrypt {
   [ ! "$PASSWORD" ] && password_check
   openssl aes-256-cbc -d -a -salt -pbkdf2 -pass pass:"$PASSWORD" <"$1"
 }
+function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # Git
 function git_config_global {
