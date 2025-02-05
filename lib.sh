@@ -62,6 +62,7 @@ INSTALL_SCRIPTS=(
   "install/lazygit.sh"
   "install/ripgrep.sh"
   "install/fd.sh"
+  "install/fzf.sh"
   "install/npm.sh"
   # lazyvim
   "install/lazyvim.sh"
