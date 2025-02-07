@@ -4,3 +4,4 @@
 
 vim.g.lazyvim_python_lsp = "pyright"
 vim.g.autoformat = false
+vim.g.lazyvim_picker = "telescope"
