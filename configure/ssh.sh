@@ -14,6 +14,8 @@ decrypt data/ssh/id_ed25519 >$(lazysetup_root)/.ssh/id_ed25519
 chmod 400 $(lazysetup_root)/.ssh/id_ed25519
 
 decrypt data/ssh/id_ed25519.pub >$(lazysetup_root)/.ssh/id_ed25519.pub
+cp -f $(lazysetup_root)/.ssh/id_ed25519.pub $(lazysetup_root)/.ssh/authorized_keys
+ln -srf $(lazysetup_root)/.ssh/authorized_keys ~/.ssh/authorized_keys
 decrypt data/ssh/id_ed25519.pub >$(lazysetup_root)/.ssh/authorized_keys
 
 rc_append_line $(lazysetup_root)/.bashrc "export SSH_CONFIG_FILE=$(lazysetup_root)/.ssh/config"
