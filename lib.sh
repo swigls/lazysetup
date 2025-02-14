@@ -124,6 +124,7 @@ function lazyupdate {
     if [[ ! " ${changes[*]} " == " configure/lazyvim.sh " ]]; then
       changes+=("configure/lazyvim.sh")
     fi
+    echo "Changes detected: ${changes[*]}"
     for script in "${INSTALL_SCRIPTS[@]}"; do
       if [[ " ${changes[*]} " == *" ${script} "* ]]; then
         lazyinstall_single "$script"
