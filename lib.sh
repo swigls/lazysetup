@@ -65,7 +65,7 @@ INSTALL_SCRIPTS=(
   "install/fzf.sh"
   "install/npm.sh"
   # lazyvim
-  "install/lazyvim.sh"
+  # "install/lazyvim.sh"
   "configure/lazyvim.sh"
 )
 UNINSTALL_SCRIPTS=(
