@@ -112,6 +112,7 @@ function lazyupdate {
     cd .gitcache || exit 1
 
     # Check git remote update, and sync
+    git fetch
     [ -z "$changes" ] && changes=$(git diff --name-only master origin/master)
     if [[ -z "$changes" ]]; then
       echo "No git changes detected"
