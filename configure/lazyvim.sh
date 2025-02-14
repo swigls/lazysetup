@@ -11,8 +11,3 @@ for filepath in data/lazyvim/config/*; do
   filename=$(basename "$filepath")
   cp -f "$filepath" "$(lazysetup_root)"/xdg_base/.config/nvim/lua/config/
 done
-
-# Interactive Installation
-source ~/.bashrc
-nvim
-
