@@ -65,7 +65,6 @@ INSTALL_SCRIPTS=(
   "install/fzf.sh"
   "install/npm.sh"
   # lazyvim
-  # "install/lazyvim.sh"
   "configure/lazyvim.sh"
 )
 UNINSTALL_SCRIPTS=(
@@ -121,13 +120,6 @@ function lazyupdate {
     git pull origin master
 
     # Install the scripts that have changes
-    # if [[ ! " ${changes[*]} " == " configure/lazyvim.sh " ]]; then
-    #   for change in "${changes[@]}"; do
-    #     if [[ "$change" == "data/lazyvim/"* ]]; then
-    #       changes+=("configure/lazyvim.sh")
-    #       break
-    #     fi
-    #   done
     # (always jpdate lazyvim config)
     if [[ ! " ${changes[*]} " == " configure/lazyvim.sh " ]]; then
       changes+=("configure/lazyvim.sh")
