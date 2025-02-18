@@ -1,0 +1,2 @@
+- lazyupdate
+  - Separate implementation: always clone lazyupdate_impl from remote
