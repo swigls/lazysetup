@@ -84,7 +84,7 @@ function lazysourcerc {
     conda_env=
   fi
   source ~/.bashrc
-  if [ "$conda_env" ]; then
+  if [ "$conda_env" ] && [ "$conda_env" != "base" ]; then
     act "$conda_env"
   fi
 }
