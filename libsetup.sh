@@ -36,12 +36,25 @@ function git_remote_set_url {
     git remote set-url origin "git@github.com:swigls/lazysetup"
   fi
 }
+function make_sure_git_installed {
+  if ! command -v git >/dev/null 2>&1; then
+    lazyinstall_single "install/git.sh"
+    lazysourcerc
+  fi
+}
+function git_clone_lazysetup_from_remote {
+  dirname=$1
+  if [[ ! -d $dirname ]]; then
+    git clone https://github.com/swigls/lazysetup "$dirname" || exit 1
+  fi
+}
 
 # Files
 function remove_or_exit {
   file=$1
   if [ -e "$file" ]; then
-    read -rp "$file already exists. Remove to Proceed? (y/n)" remove_existing
+    # read -rp "$file already exists. Remove to Proceed? (y/n)" remove_existing
+    remove_existing=n  # TODO: clean code
     case $remove_existing in
     [yY])
       echo "Removing $file ..."
@@ -81,9 +94,7 @@ function rc_append_line {
       return 1
     fi
   else
-    if [[ $(cat "$file") == *"$content"* ]]; then
-      echo "Skip: $file already contains \"$content\""
-    else
+    if [[ $(cat "$file") != *"$content"* ]]; then
       echo "$content" >>"$file"
     fi
   fi

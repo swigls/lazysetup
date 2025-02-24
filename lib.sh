@@ -44,7 +44,7 @@ function current_conda_env {
 }
 
 # Installation-related functions
-INSTALL_SCRIPTS=(
+LAZY_INSTALL_SCRIPTS=(
   # init
   "configure/init.sh"
   # misc
@@ -67,7 +67,7 @@ INSTALL_SCRIPTS=(
   # lazyvim
   "configure/lazyvim.sh"
 )
-UNINSTALL_SCRIPTS=(
+LAZY_UNINSTALL_SCRIPTS=(
   "configure/init.sh"
   "configure/git.sh"
 )
@@ -88,62 +88,42 @@ function lazysourcerc {
     act "$conda_env"
   fi
 }
+function lazyprepare_setup {
+  lazycd "$(lazysetup_root)"
+  source libsetup.sh || exit 1
+}
 function lazyinstall_single {
   script=$1
-  (
-    bash "$script"
-  )
+  bash "$script"
 }
 function lazyupdate {
   (
     lazycd "$(lazysetup_root)"
-    # If git is not installed, install it
-    if ! command -v git >/dev/null 2>&1; then
-      lazyinstall_single "install/git.sh"
-      lazysourcerc
-    fi
+    source libsetup.sh || exit 1
+    make_sure_git_installed
 
-    # cd to the git-cache dir for lazysetup
-    if [[ ! -d .gitcache ]]; then
-      # If no git cache found, install all
-      git clone https://github.com/swigls/lazysetup .gitcache || exit 1
-      changes=("${INSTALL_SCRIPTS[@]}")
-    fi
+    git_clone_lazysetup_from_remote .gitcache
     cd .gitcache || exit 1
+    git pull
 
-    # Check git remote update, and sync
-    git fetch
-    [ -z "$changes" ] && changes=$(git diff --name-only master origin/master)
-    if [[ -z "$changes" ]]; then
-      echo "No git changes detected"
-      exit 1
-    fi
-    git pull origin master
-
-    # Install the scripts that have changes
-    # (always jpdate lazyvim config)
-    if [[ ! " ${changes[*]} " == " configure/lazyvim.sh " ]]; then
-      changes+=("configure/lazyvim.sh")
-    fi
-    echo "Changes detected: ${changes[*]}"
-    for script in "${INSTALL_SCRIPTS[@]}"; do
-      if [[ " ${changes[*]} " == *" ${script} "* ]]; then
-        lazyinstall_single "$script"
-      fi
+    for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
+      lazyinstall_single "$script"
     done
-  ) && lazysourcerc # Re-source the bashrc if changes are made
+  ) && lazysourcerc
 }
 function lazyuninstall {
   arg=$1
   [[ $arg == "no_cd" ]] && export NO_CD=1
   (
     if [[ ! $NO_CD ]]; then
-      cd "$(lazysetup_root)" || exit 1
+      lazycd "$(lazysetup_root)"
     fi
+    source libsetup.sh || exit 1
     export UNINSTALL=1
-    for script in $UNINSTALL_SCRIPTS; do
+    for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
       lazyinstall_single "$script"
     done
     rm -rf "$(lazysetup_root)"
   )
+  NO_CD=
 }
