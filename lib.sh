@@ -98,13 +98,13 @@ function lazyupdate {
   (
     if [[ ! $NO_CD ]]; then
       lazycd "$(lazysetup_root)"
-    fi
-    source libsetup.sh || exit 1
-    make_sure_git_installed
+      source libsetup.sh || exit 1
+      make_sure_git_installed
 
-    git_clone_lazysetup_from_remote .gitcache
-    cd .gitcache || exit 1
-    git pull
+      git_clone_lazysetup_from_remote .gitcache
+      cd .gitcache || exit 1
+      git pull
+    fi
 
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
       lazyinstall_single "$script"
