@@ -44,13 +44,6 @@ function make_sure_git_installed {
     lazysourcerc
   fi
 }
-function git_clone_lazysetup_from_remote {
-  make_sure_git_installed
-  dirname=$1
-  if [[ ! -d $dirname ]]; then
-    git clone https://github.com/swigls/lazysetup "$dirname" || exit 1
-  fi
-}
 
 # Files
 function remove_or_exit {

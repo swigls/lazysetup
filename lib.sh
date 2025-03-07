@@ -79,6 +79,16 @@ function _lazycd {
   mkdir -p "$tgtdir"
   cd "$tgtdir" || exit 1
 }
+function _cd_newest_lazysetup {
+  make_sure_git_installed
+  dirpath=$(_lazysetup_gittmp_root)
+  if [[ ! -d "$dirpath" ]]; then
+    [[ -e "$dirpath" ]] && rm -rf "$dirpath"
+    git clone https://github.com/swigls/lazysetup "$dirpath" || exit 1
+  fi
+  cd "$dirpath" || exit 1
+  git pull
+}
 function _lazysourcerc {
   # Re-source the bashrc while keeping the current conda environment
   if command -v conda >/dev/null 2>&1; then
@@ -96,17 +106,10 @@ function _lazyinstall_single {
   bash "$script"
 }
 function lazyupdate {
-  arg=$1
-  [[ $arg == "no_cd" ]] && export NO_CD=1
+  [[ $1 == no_cd ]] && export NO_CD=1
   (
-    if [[ ! $NO_CD ]]; then
-      _lazycd "$(_lazysetup_root)"
-      source libsetup.sh || exit 1
-
-      git_clone_lazysetup_from_remote .gitcache
-      cd .gitcache || exit 1
-      git pull
-    fi
+    [[ ! $NO_CD ]] && _cd_newest_lazysetup
+    source libsetup.sh || exit 1
 
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
       _lazyinstall_single "$script"
@@ -115,14 +118,12 @@ function lazyupdate {
   export NO_CD=
 }
 function lazyuninstall {
-  arg=$1
-  [[ $arg == "no_cd" ]] && export NO_CD=1
+  [[ $1 == no_cd ]] && export NO_CD=1
   (
-    if [[ ! $NO_CD ]]; then
-      _lazycd "$(_lazysetup_root)"
-    fi
+    [[ ! $NO_CD ]] && _cd_newest_lazysetup
     source libsetup.sh || exit 1
     export UNINSTALL=1
+
     for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
       _lazyinstall_single "$script"
     done
