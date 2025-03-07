@@ -5,5 +5,5 @@ arg=$1
 if [[ $arg == "uninstall" ]]; then
   lazyuninstall no_cd
 else
-  lazyupdate
+  lazyupdate no_cd
 fi

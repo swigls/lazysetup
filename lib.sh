@@ -93,8 +93,12 @@ function lazyinstall_single {
   bash "$script"
 }
 function lazyupdate {
+  arg=$1
+  [[ $arg == "no_cd" ]] && export NO_CD=1
   (
-    lazycd "$(lazysetup_root)"
+    if [[ ! $NO_CD ]]; then
+      lazycd "$(lazysetup_root)"
+    fi
     source libsetup.sh || exit 1
     make_sure_git_installed
 
