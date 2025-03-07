@@ -1,6 +1,9 @@
 # Path
-function lazysetup_root {
+function _lazysetup_root {
   echo ~/.lazysetup
+}
+function _lazysetup_gittmp_root {
+  echo $(_lazysetup_root)/.gittmp
 }
 
 # Shortcuts
@@ -39,7 +42,7 @@ function act {
 function deact {
   conda deactivate
 }
-function current_conda_env {
+function _current_conda_env {
   echo "$(conda info --envs | grep '*' | awk '{print $1}')"
 }
 
@@ -71,15 +74,15 @@ LAZY_UNINSTALL_SCRIPTS=(
   "configure/init.sh"
   "configure/git.sh"
 )
-function lazycd {
+function _lazycd {
   tgtdir=$1
   mkdir -p "$tgtdir"
   cd "$tgtdir" || exit 1
 }
-function lazysourcerc {
+function _lazysourcerc {
   # Re-source the bashrc while keeping the current conda environment
   if command -v conda >/dev/null 2>&1; then
-    conda_env=$(current_conda_env)
+    conda_env=$(_current_conda_env)
   else
     conda_env=
   fi
@@ -88,7 +91,7 @@ function lazysourcerc {
     act "$conda_env"
   fi
 }
-function lazyinstall_single {
+function _lazyinstall_single {
   script=$1
   bash "$script"
 }
@@ -97,7 +100,7 @@ function lazyupdate {
   [[ $arg == "no_cd" ]] && export NO_CD=1
   (
     if [[ ! $NO_CD ]]; then
-      lazycd "$(lazysetup_root)"
+      _lazycd "$(_lazysetup_root)"
       source libsetup.sh || exit 1
 
       git_clone_lazysetup_from_remote .gitcache
@@ -106,9 +109,9 @@ function lazyupdate {
     fi
 
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
-      lazyinstall_single "$script"
+      _lazyinstall_single "$script"
     done
-  ) && lazysourcerc
+  ) && _lazysourcerc
   export NO_CD=
 }
 function lazyuninstall {
@@ -116,14 +119,14 @@ function lazyuninstall {
   [[ $arg == "no_cd" ]] && export NO_CD=1
   (
     if [[ ! $NO_CD ]]; then
-      lazycd "$(lazysetup_root)"
+      _lazycd "$(_lazysetup_root)"
     fi
     source libsetup.sh || exit 1
     export UNINSTALL=1
     for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
-      lazyinstall_single "$script"
+      _lazyinstall_single "$script"
     done
-    rm -rf "$(lazysetup_root)"
+    rm -rf "$(_lazysetup_root)"
   )
   export NO_CD=
 }
