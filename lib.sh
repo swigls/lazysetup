@@ -29,8 +29,8 @@ function act {
   if [[ $1 ]]; then
     envname=$1
   else
-    envname=$(basename "$(git rev-parse --show-toplevel)")
-    gitdir=$(dirname "$(git rev-parse --show-toplevel)")
+    gitdir=$(git rev-parse --show-toplevel)
+    envname=$(basename "$gitdir")
   fi
   env_exist=1
   conda activate "$envname" || env_exist=
