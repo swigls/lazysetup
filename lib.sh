@@ -99,7 +99,6 @@ function lazyupdate {
     if [[ ! $NO_CD ]]; then
       lazycd "$(lazysetup_root)"
       source libsetup.sh || exit 1
-      make_sure_git_installed
 
       git_clone_lazysetup_from_remote .gitcache
       cd .gitcache || exit 1

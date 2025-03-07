@@ -21,6 +21,7 @@ function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4
 
 # Git
 function git_config_global {
+  make_sure_git_installed
   var=$1
   value=$2
   if [[ $UNINSTALL ]]; then
@@ -30,6 +31,7 @@ function git_config_global {
   fi
 }
 function git_remote_set_url {
+  make_sure_git_installed
   if [[ $UNINSTALL ]]; then
     git remote set-url origin "https://github.com/swigls/lazysetup"
   else
@@ -43,6 +45,7 @@ function make_sure_git_installed {
   fi
 }
 function git_clone_lazysetup_from_remote {
+  make_sure_git_installed
   dirname=$1
   if [[ ! -d $dirname ]]; then
     git clone https://github.com/swigls/lazysetup "$dirname" || exit 1
