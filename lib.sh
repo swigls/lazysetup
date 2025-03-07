@@ -122,8 +122,8 @@ function lazyuninstall {
   (
     [[ ! $NO_CD ]] && _cd_newest_lazysetup
     source libsetup.sh || exit 1
-    export UNINSTALL=1
 
+    export UNINSTALL=1
     for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
       _lazyinstall_single "$script"
     done
