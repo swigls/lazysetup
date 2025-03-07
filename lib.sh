@@ -95,16 +95,13 @@ function _cd_newest_lazysetup {
   git pull
 }
 function _lazysourcerc {
-  # Re-source the bashrc while keeping the current conda environment
+  deact
   if command -v conda >/dev/null 2>&1; then
     conda_env=$(_current_conda_env)
   else
     conda_env=
   fi
   source ~/.bashrc
-  if [ "$conda_env" ] && [ "$conda_env" != "base" ]; then
-    act "$conda_env"
-  fi
 }
 function _lazyinstall_single {
   script=$1
