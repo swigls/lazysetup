@@ -88,10 +88,6 @@ function lazysourcerc {
     act "$conda_env"
   fi
 }
-function lazyprepare_setup {
-  lazycd "$(lazysetup_root)"
-  source libsetup.sh || exit 1
-}
 function lazyinstall_single {
   script=$1
   bash "$script"
