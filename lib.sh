@@ -86,7 +86,6 @@ function _lazycd {
   cd "$tgtdir" || exit 1
 }
 function _cd_newest_lazysetup {
-  make_sure_git_installed
   dirpath=$(lazysetup_gittmp_root)
   if [[ ! -d "$dirpath" ]]; then
     [[ -e "$dirpath" ]] && rm -rf "$dirpath"
