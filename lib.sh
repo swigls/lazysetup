@@ -110,6 +110,7 @@ function lazyupdate {
       lazyinstall_single "$script"
     done
   ) && lazysourcerc
+  export NO_CD=
 }
 function lazyuninstall {
   arg=$1
@@ -125,5 +126,5 @@ function lazyuninstall {
     done
     rm -rf "$(lazysetup_root)"
   )
-  NO_CD=
+  export NO_CD=
 }
