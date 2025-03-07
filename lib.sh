@@ -30,12 +30,19 @@ function act {
     envname=$1
   else
     envname=$(basename "$(git rev-parse --show-toplevel)")
+    gitdir=$(basename "$(git rev-parse --show-toplevel)")
   fi
   env_exist=1
   conda activate "$envname" || env_exist=
   [[ $env_exist ]] && return 0
+  # Install conda environment
   read -rp "No \"$envname\" environment, thus creating it. Which Python version? " python_version
-  conda create -n "$envname" python=="$python_version" pip setuptools
+  conda create -y -n "$envname" python=="$python_version" pip setuptools
+  if [[ -e setup.py ]]; then
+    (cd "$gitdir" && pip install -e .)
+  elif [[ -e requirements.txt ]]; then
+    (cd "$gitdir" && pip install -r requirements.txt)
+  fi
   conda activate "$envname"
 }
 function deact {
