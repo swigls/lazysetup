@@ -31,13 +31,12 @@ function act {
   else
     envname=$(basename "$(git rev-parse --show-toplevel)")
   fi
-  not_exist=
-  conda activate "$envname" || not_exist=1
-  if [[ $not_exist ]]; then
-    read -rp "No \"$envname\" environment, thus creating it. Which Python version? " python_version
-    conda create -n "$envname" python=="$python_version" pip setuptools
-    conda activate "$envname"
-  fi
+  env_exist=1
+  conda activate "$envname" || env_exist=
+  [[ $env_exist ]] && return 0
+  read -rp "No \"$envname\" environment, thus creating it. Which Python version? " python_version
+  conda create -n "$envname" python=="$python_version" pip setuptools
+  conda activate "$envname"
 }
 function deact {
   conda deactivate
