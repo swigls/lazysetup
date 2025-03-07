@@ -1,9 +1,9 @@
 # Path
-function _lazysetup_root {
+function lazysetup_root {
   echo ~/.lazysetup
 }
-function _lazysetup_gittmp_root {
-  echo $(_lazysetup_root)/.gittmp
+function lazysetup_gittmp_root {
+  echo $(lazysetup_root)/.gittmp
 }
 
 # Shortcuts
@@ -81,7 +81,7 @@ function _lazycd {
 }
 function _cd_newest_lazysetup {
   make_sure_git_installed
-  dirpath=$(_lazysetup_gittmp_root)
+  dirpath=$(lazysetup_gittmp_root)
   if [[ ! -d "$dirpath" ]]; then
     [[ -e "$dirpath" ]] && rm -rf "$dirpath"
     git clone https://github.com/swigls/lazysetup "$dirpath" || exit 1
@@ -127,7 +127,7 @@ function lazyuninstall {
     for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
       _lazyinstall_single "$script"
     done
-    rm -rf "$(_lazysetup_root)"
+    rm -rf "$(lazysetup_root)"
   )
   export NO_CD=
 }
