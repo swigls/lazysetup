@@ -23,6 +23,11 @@ function tb {
 
   tensorboard --logdir "$logdir" --host 0.0.0.0
 }
+function sshxl8 {
+  last_ip=$1
+  ssh -p 26882 sean@100.100.10.${last_ip} -t "tmux a || tmux"
+}
+
 
 # Conda-related functions
 function act {
@@ -67,14 +72,11 @@ LAZY_INSTALL_SCRIPTS=(
   # conda
   "install/conda.sh"
   # requirements for lazyvim
-  "install/nvim.sh"
   "install/lazygit.sh"
   "install/ripgrep.sh"
   "install/fd.sh"
   "install/fzf.sh"
   "install/npm.sh"
-  # lazyvim
-  "configure/lazyvim.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
   "configure/init.sh"
