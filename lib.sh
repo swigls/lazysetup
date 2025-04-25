@@ -125,15 +125,6 @@ function _cd_newest_lazysetup {
   cd "$dirpath" || exit 1
   git pull
 }
-function _lazysourcerc {
-  deact
-  if command -v conda >/dev/null 2>&1; then
-    conda_env=$(_current_conda_env)
-  else
-    conda_env=
-  fi
-  source ~/.bashrc
-}
 function _lazyinstall_single {
   script=$1
   bash "$script"
@@ -147,7 +138,8 @@ function lazyupdate {
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
       _lazyinstall_single "$script"
     done
-  ) && _lazysourcerc
+  )
+  source ~/.bashrc
   export NO_CD=
 }
 function lazyuninstall {
