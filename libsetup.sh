@@ -15,7 +15,7 @@ function password_check {
 }
 function encrypt {
   [ ! "$PASSWORD" ] && password_check
-  echo -n "$1" | openssl aes-256-cbc -a -pbkdf2 -pass pass:"$PASSWORD" | tr -d '\n' >"$2"
+  echo -n "$1" | openssl aes-256-cbc -e -a -pbkdf2 -pass pass:"$PASSWORD" >"$2"
 }
 function decrypt {
   [ ! "$PASSWORD" ] && password_check

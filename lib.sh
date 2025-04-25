@@ -9,9 +9,6 @@ function lazysetup_constants_root {
   echo $(lazysetup_gittmp_root)/data/constants
 }
 
-# Constants
-AIHUB_API_KEY="56396CEF-18C4-4181-8F5B-43BF96DE48AD"
-
 # Shortcuts
 function clone {
   remote=$1
@@ -32,11 +29,6 @@ function tb {
 function sshxl8 {
   last_ip=$1
   ssh -p 26882 sean@100.100.10.${last_ip} -t "tmux a || tmux"
-}
-
-# Constants
-function AIHUB_API_KEY {
-  decrypt $(lazysetup_constants_root)/AIHUB_API_KEY
 }
 
 # Conda-related functions
