@@ -5,6 +5,12 @@ function lazysetup_root {
 function lazysetup_gittmp_root {
   echo $(lazysetup_root)/.gittmp
 }
+function lazysetup_constants_root {
+  echo $(lazysetup_root)/data/constants
+}
+
+# Constants
+AIHUB_API_KEY="56396CEF-18C4-4181-8F5B-43BF96DE48AD"
 
 # Shortcuts
 function clone {
@@ -28,6 +34,30 @@ function sshxl8 {
   ssh -p 26882 sean@100.100.10.${last_ip} -t "tmux a || tmux"
 }
 
+# Privacy
+function password_check {
+  [ "$PASSWORD" ] && return 0
+  read -rs -p $'Type in the password for private keys and repos: \n' password
+  export PASSWORD=$password
+  check_result=$(decrypt data/password)
+  if [[ ! $check_result == correct ]]; then
+    echo "Password incorrect."
+    exit 1
+  fi
+}
+function encrypt {
+  [ ! "$PASSWORD" ] && password_check
+  echo -n "$1" | openssl aes-256-cbc -a -pbkdf2 -pass pass:"$PASSWORD" | tr -d '\n' >"$2"
+}
+function decrypt {
+  [ ! "$PASSWORD" ] && password_check
+  openssl aes-256-cbc -d -a -pbkdf2 -pass pass:"$PASSWORD" <"$1"
+}
+
+# Constants
+function AIHUB_API_KEY {
+  decrypt $(lazysetup_constants_root)/AIHUB_API_KEY
+}
 
 # Conda-related functions
 function act {
