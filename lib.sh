@@ -6,7 +6,7 @@ function lazysetup_gittmp_root {
   echo $(lazysetup_root)/.gittmp
 }
 function lazysetup_constants_root {
-  echo $(lazysetup_root)/data/constants
+  echo $(lazysetup_gittmp_root)/data/constants
 }
 
 # Constants
