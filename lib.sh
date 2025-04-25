@@ -125,10 +125,6 @@ function _cd_newest_lazysetup {
   cd "$dirpath" || exit 1
   git pull
 }
-function _lazyinstall_single {
-  script=$1
-  bash "$script"
-}
 function lazyupdate {
   [[ $1 == no_cd ]] && export NO_CD=1
   (
@@ -150,7 +146,7 @@ function lazyuninstall {
 
     export UNINSTALL=1
     for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
-      _lazyinstall_single "$script"
+      bash "$script"
     done
     rm -rf "$(lazysetup_root)"
   )
