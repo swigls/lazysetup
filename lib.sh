@@ -72,7 +72,6 @@ LAZY_INSTALL_SCRIPTS=(
   # conda
   "install/conda.sh"
   # requirements for lazyvim
-  "install/lazygit.sh"
   "install/ripgrep.sh"
   "install/fd.sh"
   "install/fzf.sh"
