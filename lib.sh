@@ -106,7 +106,7 @@ function lazyupdate {
     source libsetup.sh || exit 1
 
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
-      _lazyinstall_single "$script"
+      bash "$script"
     done
   )
   source ~/.bashrc
