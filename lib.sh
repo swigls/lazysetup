@@ -63,6 +63,7 @@ function _current_conda_env {
 LAZY_INSTALL_SCRIPTS=(
   # init
   "configure/init.sh"
+  "configure/constants.sh"
   # misc
   "configure/no_beep.sh"
   "configure/tmux.sh"
