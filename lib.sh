@@ -53,6 +53,9 @@ function aihubdown {
   fi
   aihubshell -mode d -datasetkey "$datasetkey" -aihubapikey "$AIHUB_API_KEY"
 }
+function resrc {
+  source ~/.bashrc
+}
 
 # Conda-related functions
 function act {
