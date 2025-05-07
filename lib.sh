@@ -30,6 +30,29 @@ function sshxl8 {
   last_ip=$1
   ssh -p 26882 sean@100.100.10.${last_ip} -t "tmux a || tmux"
 }
+function aihubdown {
+  key=$1
+  if [[ ! $key ]]; then
+    echo "Usage: aihubdown <key>"
+    return 1
+  fi
+  dataset=$(aihubshell -mode l | grep "$key")
+  num_lines=$(echo "$dataset" | wc -l)
+  if [[ $num_lines -gt]]; then
+    echo "Multiple datasets found. Please specify the dataset name."
+    echo "$dataset"
+    return 1
+  elif [[ $num_lines -eq 0 ]]; then
+    echo "No dataset found with the key: $key"
+    return 1
+  fi
+  datasetkey=$(echo "$dataset" | awk '{print $1}')
+  if [[ ! $AIHUB_API_KEY ]]; then
+    echo "Please set the AIHUB_API_KEY environment variable."
+    return 1
+  fi
+  aihubshell -mode d -datasetkey "$datasetkey" -aihubapikey "$AIHUB_API_KEY"
+}
 
 # Conda-related functions
 function act {
