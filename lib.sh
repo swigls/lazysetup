@@ -38,7 +38,7 @@ function aihubdown {
   fi
   dataset=$(aihubshell -mode l | grep "$key")
   num_lines=$(echo "$dataset" | wc -l)
-  if [[ $num_lines -gt]]; then
+  if [[ $num_lines -gt 1 ]]; then
     echo "Multiple datasets found. Please specify the dataset name."
     echo "$dataset"
     return 1
