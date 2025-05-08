@@ -46,12 +46,12 @@ function aihubdown {
     echo "No dataset found with the key: $key"
     return 1
   fi
-  datasetkey=$(echo "$dataset" | awk -F', ' '{print $1}')
+  datasetkey=${dataset%%', '*}
   if [[ ! $AIHUB_API_KEY ]]; then
     echo "Please set the AIHUB_API_KEY environment variable."
     return 1
   fi
-  datasetname=$(echo "$dataset" | awk -F', ' '{print $2}')
+  datasetname=${dataset#*', '}
   tmp_dirname=downloading_"$datasetname"
   echo "Downloading dataset: $datasetname"
   (
