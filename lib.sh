@@ -53,6 +53,7 @@ function aihubdown {
   fi
   datasetname=$(echo "$dataset" | awk -F', ' '{print $2}')
   tmp_dirname=downloading_"$datasetname"
+  echo "Downloading dataset: $datasetname"
   (
     mkdir -p "$tmp_dirname"
     cd "$tmp_dirname" || exit 1
