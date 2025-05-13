@@ -81,10 +81,9 @@ function act {
   # Install conda environment
   read -rp "No \"$envname\" environment, thus creating it. Which Python version? " python_version
   conda create -y -n "$envname" python=="$python_version" pip setuptools
-  if [[ -e setup.py ]]; then
-    (cd "$gitdir" && pip install -e .)
-  elif [[ -e requirements.txt ]]; then
+  if [[ -e requirements.txt ]]; then
     (cd "$gitdir" && pip install -r requirements.txt)
+    [[ -e setup.py ]] && (cd "$gitdir" && pip install -e .)
   fi
   conda activate "$envname"
 }
