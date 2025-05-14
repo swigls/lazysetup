@@ -34,9 +34,14 @@ function aihubdown {
   key=$1
   if [[ ! $key ]]; then
     echo "Usage: aihubdown <key>"
+    echo "<key> can be a part of the dataset name, or the dataset index."
     return 1
   fi
-  dataset=$(aihubshell -mode l | grep "$key")
+  if [[ $key =~ ^[0-9]+$ ]]; then
+    dataset=$(aihubshell -mode l | grep -E "^[0-9]+, " | grep "$key")
+  else
+    dataset=$(aihubshell -mode l | grep "$key")
+  fi
   num_lines=$(echo "$dataset" | wc -l)
   if [[ $num_lines -gt 1 ]]; then
     echo "Multiple datasets found. Please specify the dataset name."
