@@ -27,8 +27,12 @@ function tb {
   tensorboard --logdir "$logdir" --host 0.0.0.0
 }
 function sshxl8 {
-  last_ip=$1
-  ssh -p 26882 sean@100.100.10.${last_ip} -t "tmux a || tmux"
+  if [[ $1 == "azure" ]]; then
+    ip=172.184.128.202
+  else
+    ip=100.100.10.$1
+  fi
+  ssh -p 26882 sean@100.100.10.${ip} -t "tmux a || tmux"
 }
 function aihubdown {
   key=$1
