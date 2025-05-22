@@ -32,7 +32,7 @@ function sshxl8 {
   else
     ip=100.100.10.$1
   fi
-  ssh -p 26882 sean@100.100.10.${ip} -t "tmux a || tmux"
+  ssh -p 26882 sean@${ip} -t "tmux a || tmux"
 }
 function aihubdown {
   key=$1
