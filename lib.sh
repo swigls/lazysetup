@@ -28,11 +28,10 @@ function tb {
 }
 function sshxl8 {
   if [[ $1 == "azure" ]]; then
-    ip=172.184.128.202
+    ssh -p 26882 sean@$172.184.128.202 -t "tmux a || tmux"
   else
-    ip=100.100.10.$1
+    ssh -p 26882 sean@$100.100.10.${1} -t "tmux a || tmux"
   fi
-  ssh -p 26882 sean@${ip} -t "tmux a || tmux"
 }
 function aihubdown {
   key=$1
