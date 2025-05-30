@@ -11,9 +11,11 @@ echo \
   AddKeysToAgent yes" >"$(lazysetup_root)"/.ssh/config
 
 decrypt data/ssh/id_ed25519 >"$(lazysetup_root)"/.ssh/id_ed25519
+cp -f "$(lazysetup_root)"/.ssh/id_ed25519 ~/.ssh/id_ed25519
 chmod 400 "$(lazysetup_root)"/.ssh/id_ed25519
 
 decrypt data/ssh/id_ed25519.pub >"$(lazysetup_root)"/.ssh/id_ed25519.pub
+cp -f "$(lazysetup_root)"/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub
 cp -f "$(lazysetup_root)"/.ssh/id_ed25519.pub "$(lazysetup_root)"/.ssh/authorized_keys
 mkdir -p ~/.ssh
 ln -srf "$(lazysetup_root)"/.ssh/authorized_keys ~/.ssh/authorized_keys
