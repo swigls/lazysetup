@@ -28,9 +28,9 @@ function tb {
 }
 function sshxl8 {
   if [[ $1 == "azure" ]]; then
-    ssh -p 22 sean@172.184.128.202 -t "tmux a || tmux"
+    ssh -p 22 sean@172.184.128.202
   else
-    ssh -p 26882 sean@100.100.10.${1} -t "tmux a || tmux"
+    ssh -p 26882 sean@100.100.10.${1}
   fi
 }
 function aihubdown {
