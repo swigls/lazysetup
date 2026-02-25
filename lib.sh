@@ -123,6 +123,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/fzf.sh"
   "install/npm.sh"
   "install/aihubshell.sh"
+  "install/zellij.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
   "configure/init.sh"
