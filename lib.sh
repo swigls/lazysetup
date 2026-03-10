@@ -105,6 +105,7 @@ LAZY_INSTALL_SCRIPTS=(
   "configure/init.sh"
   # misc
   "configure/no_beep.sh"
+  "configure/colorterm.sh"
   "configure/tmux.sh"
   "configure/ssh.sh"
   "install/lib.sh"
