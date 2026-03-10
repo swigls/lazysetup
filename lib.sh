@@ -126,6 +126,9 @@ LAZY_INSTALL_SCRIPTS=(
   "install/zellij.sh"
   "install/helix.sh"
   "install/gitui.sh"
+  "install/delta.sh"
+  "install/lazygit.sh"
+  "configure/lazygit.sh"
   "configure/claude.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
