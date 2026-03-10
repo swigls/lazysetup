@@ -5,9 +5,6 @@ function lazysetup_root {
 function lazysetup_gittmp_root {
   echo $(lazysetup_root)/.gittmp
 }
-function lazysetup_constants_root {
-  echo $(lazysetup_gittmp_root)/data/constants
-}
 
 # Shortcuts
 function clone {
@@ -106,7 +103,6 @@ function _current_conda_env {
 LAZY_INSTALL_SCRIPTS=(
   # init
   "configure/init.sh"
-  "configure/constants.sh"
   # misc
   "configure/no_beep.sh"
   "configure/tmux.sh"
