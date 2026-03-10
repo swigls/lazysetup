@@ -124,7 +124,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/npm.sh"
   "install/aihubshell.sh"
   "install/zellij.sh"
-  "configure/zellij.sh"
+  "install/helix.sh"
   "configure/claude.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
