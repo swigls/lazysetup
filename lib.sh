@@ -124,7 +124,6 @@ LAZY_INSTALL_SCRIPTS=(
   "install/gitui.sh"
   "install/delta.sh"
   "install/lazygit.sh"
-  "configure/lazygit.sh"
   "configure/claude.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
