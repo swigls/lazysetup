@@ -126,6 +126,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/lazygit.sh"
   "configure/lazygit.sh"
   "configure/claude.sh"
+  "configure/helix.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
   "configure/init.sh"
