@@ -72,32 +72,6 @@ function resrc {
   source ~/.bashrc
 }
 
-# Conda-related functions
-function act {
-  if [[ $1 ]]; then
-    envname=$1
-  else
-    gitdir=$(git rev-parse --show-toplevel)
-    envname=$(basename "$gitdir")
-  fi
-  env_exist=1
-  conda activate "$envname" || env_exist=
-  [[ $env_exist ]] && return 0
-  # Install conda environment
-  read -rp "No \"$envname\" environment, thus creating it. Which Python version? " python_version
-  conda create -y -n "$envname" python=="$python_version" pip setuptools
-  if [[ -e requirements.txt ]]; then
-    (cd "$gitdir" && pip install -r requirements.txt)
-    [[ -e setup.py ]] && (cd "$gitdir" && pip install -e .)
-  fi
-  conda activate "$envname"
-}
-function deact {
-  conda deactivate
-}
-function _current_conda_env {
-  echo "$(conda info --envs | grep '*' | awk '{print $1}')"
-}
 
 # Installation-related functions
 LAZY_INSTALL_SCRIPTS=(
@@ -111,8 +85,8 @@ LAZY_INSTALL_SCRIPTS=(
   # git
   "install/git.sh"
   "configure/git.sh"
-  # conda
-  "install/conda.sh"
+  # uv
+  "install/uv.sh"
   # requirements for lazyvim
   "install/ripgrep.sh"
   "install/fd.sh"
@@ -125,6 +99,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/delta.sh"
   "install/lazygit.sh"
   "configure/claude.sh"
+  "configure/helix.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
   "configure/init.sh"
