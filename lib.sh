@@ -98,6 +98,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/gitui.sh"
   "install/delta.sh"
   "install/lazygit.sh"
+  "install/s5cmd.sh"
   "configure/claude.sh"
   "configure/helix.sh"
 )
