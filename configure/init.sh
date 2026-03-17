@@ -13,3 +13,4 @@ rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_CONFIG_HOME=$(lazysetup_r
 rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_DATA_HOME=$(lazysetup_root)/xdg_base/.local/share"
 rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_STATE_HOME=$(lazysetup_root)/xdg_base/.local/state"
 rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_CACHE_HOME=$(lazysetup_root)/xdg_base/.cache"
+rc_append_line "$(lazysetup_root)/.bashrc" "export COLORTERM=truecolor"
