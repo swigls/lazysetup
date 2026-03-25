@@ -94,6 +94,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/npm.sh"
   "install/aihubshell.sh"
   "install/zellij.sh"
+  "configure/zellaude.sh"
   "install/helix.sh"
   "install/gitui.sh"
   "install/delta.sh"
