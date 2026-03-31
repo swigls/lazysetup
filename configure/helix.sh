@@ -32,8 +32,8 @@ command = "pyright-langserver"
 args = ["--stdio"]
 EOF
 
-# (3) Set EDITOR to hx
-rc_append_line "$HOME/.bashrc" 'export EDITOR="hx"'
+# (3) Set EDITOR to hx in lazysetup-managed shell config
+rc_append_line "$(lazysetup_root)/.bashrc" 'export EDITOR="hx"'
 
 # Install pyright and ruff if pip/npm available
 if command -v pip >/dev/null 2>&1; then
