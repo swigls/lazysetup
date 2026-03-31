@@ -14,7 +14,7 @@ mkdir -p "$HELIX_CONFIG_DIR"
 
 # (1) Theme
 cat > "$HELIX_CONFIG_DIR/config.toml" << 'EOF'
-theme = "kanagawa"
+theme = "gruvbox-material"
 EOF
 
 # (2) Python LSP: pyright + ruff
