@@ -1,15 +1,10 @@
 source libsetup.sh || exit 1
 
-mkdir -p "$(lazysetup_root)"/bin
+mkdir -p "$(lazysetup_bin_dir)"
+mkdir -p "$(lazysetup_config_home)"
+mkdir -p "$(lazysetup_data_home)"
+mkdir -p "$(lazysetup_state_home)"
+mkdir -p "$(lazysetup_cache_home)"
 
-rc_append_line ~/.bashrc "source $(lazysetup_root)/.bashrc" && touch "$(lazysetup_root)/.bashrc"
-rc_append_line "$(lazysetup_root)/.bashrc" "export PATH=$(lazysetup_root)/bin":\$PATH 
-rc_append_line ~/.inputrc '$include '"$(lazysetup_root)/.inputrc" && touch "$(lazysetup_root)/.inputrc"
-rc_append_line ~/.vimrc "source $(lazysetup_root)/.vimrc" && touch "$(lazysetup_root)/.vimrc"
-
-# XDG base directories into $(lazysetup_root)
-rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_CONFIG_HOME=$(lazysetup_root)/xdg_base/.config"
-rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_DATA_HOME=$(lazysetup_root)/xdg_base/.local/share"
-rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_STATE_HOME=$(lazysetup_root)/xdg_base/.local/state"
-rc_append_line "$(lazysetup_root)/.bashrc" "export XDG_CACHE_HOME=$(lazysetup_root)/xdg_base/.cache"
-rc_append_line "$(lazysetup_root)/.bashrc" "export COLORTERM=truecolor"
+rc_append_line ~/.bashrc 'export PATH="$HOME/.local/bin:$PATH"'
+rc_append_line ~/.bashrc 'export COLORTERM=truecolor'

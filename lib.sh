@@ -1,9 +1,21 @@
-# Path
-function lazysetup_root {
-  echo ~/.lazysetup
+# Paths
+function lazysetup_repo_root {
+  cd "$(dirname "${BASH_SOURCE[0]}")" && pwd
 }
-function lazysetup_gittmp_root {
-  echo $(lazysetup_root)/.gittmp
+function lazysetup_bin_dir {
+  echo "$HOME/.local/bin"
+}
+function lazysetup_config_home {
+  echo "${XDG_CONFIG_HOME:-$HOME/.config}"
+}
+function lazysetup_data_home {
+  echo "${XDG_DATA_HOME:-$HOME/.local/share}"
+}
+function lazysetup_state_home {
+  echo "${XDG_STATE_HOME:-$HOME/.local/state}"
+}
+function lazysetup_cache_home {
+  echo "${XDG_CACHE_HOME:-$HOME/.cache}"
 }
 
 # Shortcuts
@@ -57,28 +69,16 @@ LAZY_INSTALL_SCRIPTS=(
   "install/s5cmd.sh"
   "configure/helix.sh"
 )
-LAZY_UNINSTALL_SCRIPTS=(
-  "configure/init.sh"
-  "configure/git.sh"
-)
 function _lazycd {
   tgtdir=$1
   mkdir -p "$tgtdir"
   cd "$tgtdir" || exit 1
 }
-function _cd_newest_lazysetup {
-  dirpath=$(lazysetup_gittmp_root)
-  if [[ ! -d "$dirpath" ]]; then
-    [[ -e "$dirpath" ]] && rm -rf "$dirpath"
-    git clone https://github.com/swigls/lazysetup "$dirpath" || exit 1
-  fi
-  cd "$dirpath" || exit 1
-  git pull
-}
 function lazyupdate {
-  [[ $1 == no_cd ]] && export NO_CD=1
   (
-    [[ ! $NO_CD ]] && _cd_newest_lazysetup
+    # Resolve the repo from this sourced file so lazyupdate works from any cwd.
+    cd "$(lazysetup_repo_root)" || exit 1
+    git pull || exit 1
     source libsetup.sh || exit 1
 
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
@@ -86,19 +86,4 @@ function lazyupdate {
     done
   )
   source ~/.bashrc
-  export NO_CD=
-}
-function lazyuninstall {
-  [[ $1 == no_cd ]] && export NO_CD=1
-  (
-    [[ ! $NO_CD ]] && _cd_newest_lazysetup
-    source libsetup.sh || exit 1
-
-    export UNINSTALL=1
-    for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
-      bash "$script"
-    done
-    rm -rf "$(lazysetup_root)"
-  )
-  export NO_CD=
 }

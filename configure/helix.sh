@@ -1,24 +1,15 @@
 source ~/.bashrc
 source libsetup.sh || exit 1
 
-HELIX_CONFIG_DIR="$(lazysetup_root)/xdg_base/.config/helix"
-
-if [[ $UNINSTALL ]]; then
-  rm -f "$HELIX_CONFIG_DIR/config.toml"
-  rm -f "$HELIX_CONFIG_DIR/languages.toml"
-  echo "Removed helix config files."
-  exit 0
-fi
+HELIX_CONFIG_DIR="$(lazysetup_config_home)/helix"
 
 mkdir -p "$HELIX_CONFIG_DIR"
 
-# (1) Theme
-cat > "$HELIX_CONFIG_DIR/config.toml" << 'EOF'
+cat > "$HELIX_CONFIG_DIR/config.toml" <<'EOF'
 theme = "gruvbox-material"
 EOF
 
-# (2) Python LSP: pyright + ruff
-cat > "$HELIX_CONFIG_DIR/languages.toml" << 'EOF'
+cat > "$HELIX_CONFIG_DIR/languages.toml" <<'EOF'
 [[language]]
 name = "python"
 language-servers = ["pyright", "ruff"]
@@ -32,10 +23,8 @@ command = "pyright-langserver"
 args = ["--stdio"]
 EOF
 
-# (3) Set EDITOR to hx in lazysetup-managed shell config
-rc_append_line "$(lazysetup_root)/.bashrc" 'export EDITOR="hx"'
+rc_append_line ~/.bashrc 'export EDITOR="hx"'
 
-# Install pyright and ruff if pip/npm available
 if command -v pip >/dev/null 2>&1; then
   pip install ruff pyright
 elif command -v pip3 >/dev/null 2>&1; then
