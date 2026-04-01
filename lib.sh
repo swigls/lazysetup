@@ -79,7 +79,6 @@ LAZY_INSTALL_SCRIPTS=(
   "configure/init.sh"
   # misc
   "configure/no_beep.sh"
-  "configure/tmux.sh"
   "configure/ssh.sh"
   "install/lib.sh"
   # git
@@ -94,7 +93,6 @@ LAZY_INSTALL_SCRIPTS=(
   "install/npm.sh"
   "install/aihubshell.sh"
   "install/zellij.sh"
-  "configure/zellaude.sh"
   "install/helix.sh"
   "install/gitui.sh"
   "install/delta.sh"
