@@ -98,7 +98,6 @@ LAZY_INSTALL_SCRIPTS=(
   "install/delta.sh"
   "install/lazygit.sh"
   "install/s5cmd.sh"
-  "configure/claude.sh"
   "configure/helix.sh"
 )
 LAZY_UNINSTALL_SCRIPTS=(
