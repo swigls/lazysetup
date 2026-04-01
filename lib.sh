@@ -30,44 +30,6 @@ function sshxl8 {
     ssh -p 26882 sean@100.100.10.${1}
   fi
 }
-function aihubdown {
-  key=$1
-  if [[ ! $key ]]; then
-    echo "Usage: aihubdown <key>"
-    echo "<key> can be a part of the dataset name, or the dataset index."
-    return 1
-  fi
-  if [[ $key =~ ^[0-9]+$ ]]; then
-    dataset=$(aihubshell -mode l | grep -E "^[0-9]+, " | grep "$key")
-  else
-    dataset=$(aihubshell -mode l | grep "$key")
-  fi
-  num_lines=$(echo "$dataset" | wc -l)
-  if [[ $num_lines -gt 1 ]]; then
-    echo "Multiple datasets found. Please specify the dataset name."
-    echo "$dataset"
-    return 1
-  elif [[ $num_lines -eq 0 ]]; then
-    echo "No dataset found with the key: $key"
-    return 1
-  fi
-  datasetkey=${dataset%%', '*}
-  if [[ ! $AIHUB_API_KEY ]]; then
-    echo "Please set the AIHUB_API_KEY environment variable."
-    return 1
-  fi
-  datasetname=${dataset#*', '}
-  tmp_dirname=downloading_"$datasetname"
-  echo "Downloading dataset: $datasetname"
-  (
-    mkdir -p "$tmp_dirname"
-    cd "$tmp_dirname" || exit 1
-    aihubshell -mode d -datasetkey "$datasetkey" -aihubapikey "$AIHUB_API_KEY" || exit 1
-    mv * ../ || exit 1
-    cd ..
-    rmdir "$tmp_dirname" || exit 1
-  )
-}
 function resrc {
   source ~/.bashrc
 }
@@ -86,12 +48,7 @@ LAZY_INSTALL_SCRIPTS=(
   "configure/git.sh"
   # uv
   "install/uv.sh"
-  # requirements for lazyvim
-  "install/ripgrep.sh"
-  "install/fd.sh"
-  "install/fzf.sh"
   "install/npm.sh"
-  "install/aihubshell.sh"
   "install/zellij.sh"
   "install/helix.sh"
   "install/gitui.sh"
