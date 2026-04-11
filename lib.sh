@@ -64,7 +64,6 @@ LAZY_INSTALL_SCRIPTS=(
   "install/zellij.sh"
   "install/helix.sh"
   "install/gitui.sh"
-  "install/delta.sh"
   "install/s5cmd.sh"
   "configure/helix.sh"
 )

@@ -1,4 +1,0 @@
-git:
-  paging:
-    colorArg: always
-    pager: delta --dark --pager "less --RAW-CONTROL-CHARS --quit-if-one-screen --no-init"
