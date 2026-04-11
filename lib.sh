@@ -1,9 +1,21 @@
-# Path
-function lazysetup_root {
-  echo ~/.lazysetup
+# Paths
+function lazysetup_repo_root {
+  cd "$(dirname "${BASH_SOURCE[0]}")" && pwd
 }
-function lazysetup_gittmp_root {
-  echo $(lazysetup_root)/.gittmp
+function lazysetup_bin_dir {
+  echo "$HOME/.local/bin"
+}
+function lazysetup_config_home {
+  echo "${XDG_CONFIG_HOME:-$HOME/.config}"
+}
+function lazysetup_data_home {
+  echo "${XDG_DATA_HOME:-$HOME/.local/share}"
+}
+function lazysetup_state_home {
+  echo "${XDG_STATE_HOME:-$HOME/.local/state}"
+}
+function lazysetup_cache_home {
+  echo "${XDG_CACHE_HOME:-$HOME/.cache}"
 }
 
 # Shortcuts
@@ -30,44 +42,6 @@ function sshxl8 {
     ssh -p 26882 sean@100.100.10.${1}
   fi
 }
-function aihubdown {
-  key=$1
-  if [[ ! $key ]]; then
-    echo "Usage: aihubdown <key>"
-    echo "<key> can be a part of the dataset name, or the dataset index."
-    return 1
-  fi
-  if [[ $key =~ ^[0-9]+$ ]]; then
-    dataset=$(aihubshell -mode l | grep -E "^[0-9]+, " | grep "$key")
-  else
-    dataset=$(aihubshell -mode l | grep "$key")
-  fi
-  num_lines=$(echo "$dataset" | wc -l)
-  if [[ $num_lines -gt 1 ]]; then
-    echo "Multiple datasets found. Please specify the dataset name."
-    echo "$dataset"
-    return 1
-  elif [[ $num_lines -eq 0 ]]; then
-    echo "No dataset found with the key: $key"
-    return 1
-  fi
-  datasetkey=${dataset%%', '*}
-  if [[ ! $AIHUB_API_KEY ]]; then
-    echo "Please set the AIHUB_API_KEY environment variable."
-    return 1
-  fi
-  datasetname=${dataset#*', '}
-  tmp_dirname=downloading_"$datasetname"
-  echo "Downloading dataset: $datasetname"
-  (
-    mkdir -p "$tmp_dirname"
-    cd "$tmp_dirname" || exit 1
-    aihubshell -mode d -datasetkey "$datasetkey" -aihubapikey "$AIHUB_API_KEY" || exit 1
-    mv * ../ || exit 1
-    cd ..
-    rmdir "$tmp_dirname" || exit 1
-  )
-}
 function resrc {
   source ~/.bashrc
 }
@@ -79,7 +53,6 @@ LAZY_INSTALL_SCRIPTS=(
   "configure/init.sh"
   # misc
   "configure/no_beep.sh"
-  "configure/tmux.sh"
   "configure/ssh.sh"
   "install/lib.sh"
   # git
@@ -87,43 +60,24 @@ LAZY_INSTALL_SCRIPTS=(
   "configure/git.sh"
   # uv
   "install/uv.sh"
-  # requirements for lazyvim
-  "install/ripgrep.sh"
-  "install/fd.sh"
-  "install/fzf.sh"
   "install/npm.sh"
-  "install/aihubshell.sh"
   "install/zellij.sh"
-  "configure/zellaude.sh"
   "install/helix.sh"
   "install/gitui.sh"
   "install/delta.sh"
   "install/s5cmd.sh"
-  "configure/claude.sh"
   "configure/helix.sh"
-)
-LAZY_UNINSTALL_SCRIPTS=(
-  "configure/init.sh"
-  "configure/git.sh"
 )
 function _lazycd {
   tgtdir=$1
   mkdir -p "$tgtdir"
   cd "$tgtdir" || exit 1
 }
-function _cd_newest_lazysetup {
-  dirpath=$(lazysetup_gittmp_root)
-  if [[ ! -d "$dirpath" ]]; then
-    [[ -e "$dirpath" ]] && rm -rf "$dirpath"
-    git clone https://github.com/swigls/lazysetup "$dirpath" || exit 1
-  fi
-  cd "$dirpath" || exit 1
-  git pull
-}
 function lazyupdate {
-  [[ $1 == no_cd ]] && export NO_CD=1
   (
-    [[ ! $NO_CD ]] && _cd_newest_lazysetup
+    # Resolve the repo from this sourced file so lazyupdate works from any cwd.
+    cd "$(lazysetup_repo_root)" || exit 1
+    git pull || exit 1
     source libsetup.sh || exit 1
 
     for script in "${LAZY_INSTALL_SCRIPTS[@]}"; do
@@ -131,19 +85,4 @@ function lazyupdate {
     done
   )
   source ~/.bashrc
-  export NO_CD=
-}
-function lazyuninstall {
-  [[ $1 == no_cd ]] && export NO_CD=1
-  (
-    [[ ! $NO_CD ]] && _cd_newest_lazysetup
-    source libsetup.sh || exit 1
-
-    export UNINSTALL=1
-    for script in "${LAZY_UNINSTALL_SCRIPTS[@]}"; do
-      bash "$script"
-    done
-    rm -rf "$(lazysetup_root)"
-  )
-  export NO_CD=
 }

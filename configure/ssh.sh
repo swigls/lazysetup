@@ -1,24 +1,28 @@
 source libsetup.sh || exit 1
 
-remove_or_exit "$(lazysetup_root)"/.ssh
-
-mkdir -p "$(lazysetup_root)"/.ssh
-echo \
-  "Host github.com
-  HostName github.com
-  IdentityFile $(lazysetup_root)/.ssh/id_ed25519
-  IdentitiesOnly yes
-  AddKeysToAgent yes" >"$(lazysetup_root)"/.ssh/config
-
-decrypt data/ssh/id_ed25519 >"$(lazysetup_root)"/.ssh/id_ed25519
-cp -f "$(lazysetup_root)"/.ssh/id_ed25519 ~/.ssh/id_ed25519
-chmod 400 "$(lazysetup_root)"/.ssh/id_ed25519
-
-decrypt data/ssh/id_ed25519.pub >"$(lazysetup_root)"/.ssh/id_ed25519.pub
-cp -f "$(lazysetup_root)"/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub
-cp -f "$(lazysetup_root)"/.ssh/id_ed25519.pub "$(lazysetup_root)"/.ssh/authorized_keys
 mkdir -p ~/.ssh
-ln -srf "$(lazysetup_root)"/.ssh/authorized_keys ~/.ssh/authorized_keys
+touch ~/.ssh/config
+chmod 600 ~/.ssh/config
 
-rc_append_line "$(lazysetup_root)"/.bashrc "export SSH_CONFIG_FILE=$(lazysetup_root)/.ssh/config"
-rc_append_line "$(lazysetup_root)"/.bashrc "export GIT_SSH_COMMAND='ssh -F $(lazysetup_root)/.ssh/config'"
+if ! grep -q '^Host github.com$' ~/.ssh/config; then
+cat >> ~/.ssh/config <<'EOF'
+Host github.com
+  HostName github.com
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+  AddKeysToAgent yes
+EOF
+fi
+
+tmp_private_key=$(mktemp)
+tmp_public_key=$(mktemp)
+
+decrypt data/ssh/id_ed25519 > "$tmp_private_key"
+install -m 400 "$tmp_private_key" ~/.ssh/id_ed25519
+
+decrypt data/ssh/id_ed25519.pub > "$tmp_public_key"
+install -m 644 "$tmp_public_key" ~/.ssh/id_ed25519.pub
+cp -f ~/.ssh/id_ed25519.pub ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+rm -f "$tmp_private_key" "$tmp_public_key"

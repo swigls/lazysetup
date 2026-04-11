@@ -6,4 +6,4 @@ fi
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-rc_append_line "$(lazysetup_root)/.bashrc" 'export PATH="$HOME/.cargo/bin:$PATH"'
+rc_append_line ~/.bashrc 'export PATH="$HOME/.cargo/bin:$PATH"'
