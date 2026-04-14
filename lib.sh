@@ -57,7 +57,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/lib.sh"
   # git
   "install/git.sh"
-  "install/difftastic.sh"
+  "install/critique.sh"
   "configure/git.sh"
   # uv
   "install/uv.sh"

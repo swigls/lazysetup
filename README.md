@@ -1,614 +1,785 @@
-Special thanks to:  
-  
+[![Go Report](https://goreportcard.com/badge/github.com/peak/s5cmd/v2)](https://goreportcard.com/report/github.com/peak/s5cmd/v2) ![Github Actions Status](https://github.com/peak/s5cmd/actions/workflows/ci.yml/badge.svg)
+
+![](./doc/s5cmd_header.jpg)
 
 
-**[Warp, the intelligent terminal](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=lazygit_20231023)**  
-**[Available for macOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=lazygit_20231023)**  
+## Overview
+`s5cmd` is a very fast S3 and local filesystem execution tool. It comes with support
+for a multitude of operations including tab completion and wildcard support
+for files, which can be very handy for your object storage workflow while working
+with large number of files.
 
+There are already other utilities to work with S3 and similar object storage
+services, thus it is natural to wonder what `s5cmd` has to offer that others don't.
 
-[Visit warp.dev to learn more.](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=lazygit_20231023)
+In short, *`s5cmd` offers a very fast speed.*
+Thanks to [Joshua Robinson](https://github.com/joshuarobinson) for his
+study and experimentation on `s5cmd;` to quote his medium [post](https://medium.com/@joshua_robinson/s5cmd-for-high-performance-object-storage-7071352cc09d):
+> For uploads, s5cmd is 32x faster than s3cmd and 12x faster than aws-cli.
+>For downloads, s5cmd can saturate a 40Gbps link (~4.3 GB/s), whereas s3cmd
+>and aws-cli can only reach 85 MB/s and 375 MB/s respectively.
 
-  
-
-
----
-
-**[Tuple, the premier screen sharing app for developers on macOS and Windows.](https://tuple.app/lazygit)**  
-
-
----
-
-  
-
-
-**[I (Jesse) co-founded Subble to save your company time and money by finding unused and over-provisioned SaaS licences. Check it out!](https://www.subble.com)**  
-
-
----
-
-
-
-
-
-A simple terminal UI for git commands
-  
-
-
-[GitHub Releases](https://github.com/jesseduffield/lazygit/releases) [Go Report Card](https://goreportcard.com/report/github.com/jesseduffield/lazygit) [Codacy Badge](https://app.codacy.com/gh/jesseduffield/lazygit/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [Codacy Badge](https://app.codacy.com/gh/jesseduffield/lazygit/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [golangci-lint](https://golangci-lint.run/) [GitHub tag](https://github.com/jesseduffield/lazygit/releases/latest) [homebrew](https://formulae.brew.sh/formula/lazygit)
-
-commit_and_push
-
-
-
-## Sponsors
-
-Maintenance of this project is made possible by all the [contributors](https://github.com/jesseduffield/lazygit/graphs/contributors) and [sponsors](https://github.com/sponsors/jesseduffield). If you'd like to sponsor this project and have your avatar or company logo appear below [click here](https://github.com/sponsors/jesseduffield). 💙
-
-
-
-## Elevator Pitch
-
-Rant time: You've heard it before, git is *powerful*, but what good is that power when everything is so damn hard to do? Interactive rebasing requires you to edit a goddamn TODO file in your editor? *Are you kidding me?* To stage part of a file you need to use a command line program to step through each hunk and if a hunk can't be split down any further but contains code you don't want to stage, you have to edit an arcane patch file *by hand*? *Are you KIDDING me?!* Sometimes you get asked to stash your changes when switching branches only to realise that after you switch and unstash that there weren't even any conflicts and it would have been fine to just checkout the branch directly? *YOU HAVE GOT TO BE KIDDING ME!*
-
-If you're a mere mortal like me and you're tired of hearing how powerful git is when in your daily life it's a powerful pain in your ass, lazygit might be for you.
-
-## Table of contents
-
-- [Sponsors](#sponsors)
-- [Elevator Pitch](#elevator-pitch)
-- [Table of contents](#table-of-contents)
-- [Features](#features)
-  - [Stage individual lines](#stage-individual-lines)
-  - [Interactive Rebase](#interactive-rebase)
-  - [Cherry-pick](#cherry-pick)
-  - [Bisect](#bisect)
-  - [Nuke the working tree](#nuke-the-working-tree)
-  - [Amend an old commit](#amend-an-old-commit)
-  - [Filter](#filter)
-  - [Invoke a custom command](#invoke-a-custom-command)
-  - [Worktrees](#worktrees)
-  - [Rebase magic (custom patches)](#rebase-magic-custom-patches)
-  - [Rebase from marked base commit](#rebase-from-marked-base-commit)
-  - [Undo](#undo)
-  - [Commit graph](#commit-graph)
-  - [Compare two commits](#compare-two-commits)
-- [Tutorials](#tutorials)
-- [Installation](#installation)
-  - [Binary Releases](#binary-releases)
-  - [Dev container](#dev-container-feature)
-  - [Homebrew](#homebrew)
-  - [MacPorts](#macports)
-  - [Void Linux](#void-linux)
-  - [Scoop (Windows)](#scoop-windows)
-  - [gah (Linux and Mac OS)](#gah-linux-and-mac-os)
-  - [Arch Linux](#arch-linux)
-  - [Fedora / Amazon Linux 2023 / CentOS Stream](#fedora--amazon-linux-2023--centos-stream)
-    - [Fedora / RHEL Derivatives (Terra)](#fedora--rhel-derivatives-terra)
-  - [Solus Linux](#solus-linux)
-  - [Debian and Ubuntu](#debian-and-ubuntu)
-  - [Funtoo Linux](#funtoo-linux)
-  - [Gentoo Linux](#gentoo-linux)
-  - [openSUSE](#opensuse)
-  - [NixOS](#nixos)
-  - [Flox](#flox)
-  - [FreeBSD](#freebsd)
-  - [Termux](#termux)
-  - [Go](#go)
-  - [Chocolatey (Windows)](#chocolatey-windows)
-  - [Winget (Windows 10 1709 or later)](#winget-windows-10-1709-or-later)
-  - [Manual](#manual)
-- [Usage](#usage)
-  - [Keybindings](#keybindings)
-  - [Changing Directory On Exit](#changing-directory-on-exit)
-  - [Undo/Redo](#undoredo)
-- [Configuration](#configuration)
-  - [Custom Pagers](#custom-pagers)
-  - [Custom Commands](#custom-commands)
-  - [Git flow support](#git-flow-support)
-- [Contributing](#contributing)
-  - [Debugging Locally](#debugging-locally)
-- [Donate](#donate)
-- [FAQ](#faq)
-  - [What do the commit colors represent?](#what-do-the-commit-colors-represent)
-- [Shameless Plug](#shameless-plug)
-- [Alternatives](#alternatives)
-
-Lazygit is not my fulltime job but it is a hefty part time job so if you want to support the project please consider [sponsoring me](https://github.com/sponsors/jesseduffield)
-
+If you would like to know more about performance of `s5cmd` and the
+reasons for its fast speed, refer to [benchmarks](./README.md#Benchmarks) section
 ## Features
+![](./doc/usage.png)
 
-### Stage individual lines
+`s5cmd` supports wide range of object management tasks both for cloud
+storage services and local filesystems.
 
-Press space on the selected line to stage it, or press `v` to start selecting a range of lines. You can also press `a` to select the entirety of the current hunk.
-
-stage_lines
-
-### Interactive Rebase
-
-Press `i` to start an interactive rebase. Then squash (`s`), fixup (`f`), drop (`d`), edit (`e`), move up (`ctrl+k`) or move down (`ctrl+j`) any of TODO commits, before continuing the rebase by bringing up the rebase options menu with `m` and then selecting `continue`.
-
-You can also perform any these actions as a once-off (e.g. pressing `s` on a commit to squash it) without explicitly starting a rebase.
-
-This demo also uses shift+down to select a range of commits to move and fixup.
-
-interactive_rebase
-
-### Cherry-pick
-
-Press `shift+c` on a commit to copy it and press `shift+v` to paste (cherry-pick) it.
-
-cherry_pick
-
-### Bisect
-
-Press `b` in the commits view to mark a commit as good/bad in order to begin a git bisect.
-
-bisect
-
-### Nuke the working tree
-
-For when you really want to just get rid of anything that shows up when you run `git status` (and yes that includes dirty submodules) [kidpix style](https://www.youtube.com/watch?v=N4E2B_k2Bss), press `shift+d` to bring up the reset options menu and then select the 'nuke' option.
-
-Nuke working tree
-
-### Amend an old commit
-
-Pressing `shift+a` on any commit will amend that commit with the currently staged changes (running an interactive rebase in the background).
-
-amend_old_commit
-
-### Filter
-
-You can filter a view with `/`. Here we filter down our branches view and then hit `enter` to view its commits.
-
-filter
-
-### Invoke a custom command
-
-Lazygit has a very flexible [custom command system](docs/Custom_Command_Keybindings.md). In this example a custom command is defined which emulates the built-in branch checkout action.
-
-custom_command
-
-### Worktrees
-
-You can create worktrees to have multiple branches going at once without the need for stashing or creating WIP commits when switching between them. Press `w` in the branches view to create a worktree from the selected branch and switch to it.
-
-worktree_create_from_branches
-
-### Rebase magic (custom patches)
-
-You can build a custom patch from an old commit and then remove the patch from the commit, split out a new commit, apply the patch in reverse to the index, and more.
-
-In this example we have a redundant comment that we want to remove from an old commit. We hit `<enter>` on the commit to view its files, then `<enter>` on a file to focus the patch, then `<space>` to add the comment line to our custom patch, and then `ctrl+p` to view the custom patch options; selecting to remove the patch from the current commit.
-
-Learn more in the [Rebase magic Youtube tutorial](https://youtu.be/4XaToVut_hs).
-
-custom_patch
-
-### Rebase from marked base commit
-
-Say you're on a feature branch that was itself branched off of the develop branch, and you've decided you'd rather be branching off the master branch. You need a way to rebase only the commits from your feature branch. In this demo we check to see which was the last commit on the develop branch, then press `shift+b` to mark that commit as our base commit, then press `r` on the master branch to rebase onto it, only bringing across the commits from our feature branch. Then we push our changes with `shift+p`.
-
-rebase_onto
-
-### Undo
-
-You can undo the last action by pressing `z` and redo with `ctrl+z`. Here we drop a couple of commits and then undo the actions.
-Undo uses the reflog which is specific to commits and branches so we can't undo changes to the working tree or stash.
-
-[More info](/docs/Undoing.md)
-
-undo
-
-### Commit graph
-
-When viewing the commit graph in an enlarged window (use `+` and `_` to cycle screen modes), the commit graph is shown. Colours correspond to the commit authors, and as you navigate down the graph, the parent commits of the selected commit are highlighted.
-
-commit_graph
-
-### Compare two commits
-
-If you press `shift+w` on a commit (or branch/ref) a menu will open that allows you to mark that commit so that any other commit you select will be diffed against it. Once you've selected the second commit, you'll see the diff in the main view and if you press `<enter>` you'll see the files of the diff. You can press `shift+w` to view the diff menu again to see options like reversing the diff direction or exiting diff mode. You can also exit diff mode by pressing `<escape>`.
-
-diff_commits
-
-## Tutorials
-
-
-
-- [15 Lazygit Features in 15 Minutes](https://youtu.be/CPLdltN7wgE)
-- [Basics Tutorial](https://youtu.be/VDXvbHZYeKY)
-- [Rebase Magic Tutorial](https://youtu.be/4XaToVut_hs)
+- List buckets and objects
+- Upload, download or delete objects
+- Move, copy or rename objects
+- Set Server Side Encryption using AWS Key Management Service (KMS)
+- Set Access Control List (ACL) for objects/files on the upload, copy, move.
+- Print object contents to stdout
+- Select JSON records from objects using SQL expressions
+- Create or remove buckets
+- Summarize objects sizes, grouping by storage class
+- Wildcard support for all operations
+- Multiple arguments support for delete operation
+- Command file support to run commands in batches at very high execution speeds
+- Dry run support
+- [S3 Transfer Acceleration](https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html) support
+- Google Cloud Storage (and any other S3 API compatible service) support
+- Structured logging for querying command outputs
+- Shell auto-completion
+- S3 ListObjects API backward compatibility
 
 ## Installation
 
-[Packaging status](https://repology.org/project/lazygit/versions)
+### Official Releases
 
-*Most of the above packages are maintained by third parties so be sure to vet them yourself and confirm that the maintainer is a trustworthy looking person who attends local sports games and gives back to their communities with barbeque fundraisers etc*
+#### Binaries
 
-### Binary Releases
+The [Releases](https://github.com/peak/s5cmd/releases) page provides pre-built
+binaries for Linux, macOS and Windows.
 
-For Windows, Mac OS(10.12+) or Linux, you can download a binary release [here](../../releases).
+#### Homebrew
 
-### Dev container feature
+For macOS, a [homebrew](https://brew.sh) tap is provided:
 
-If you want to use lazygit in e.g. one of your GitHub Codespaces, there is a third-party [dev container feature](https://github.com/GeorgOfenbeck/features/tree/main/src/lazygit-linuxbinary) based on the binary releases mentioned above.
+    brew install peak/tap/s5cmd
 
-### Homebrew
+### Unofficial Releases (by Community)
+[![Packaging status](https://repology.org/badge/tiny-repos/s5cmd.svg)](https://repology.org/project/s5cmd/versions)
+> **Warning**
+> These releases are maintained by the community. They might be out of date compared to the official releases.
 
-It works with Linux, too.
+#### MacPorts
+You can also install `s5cmd` from [MacPorts](https://ports.macports.org/port/s5cmd/summary) on macOS:
 
-```sh
-brew install lazygit
-```
+    sudo port selfupdate
+    sudo port install s5cmd
 
-### MacPorts
+#### Conda
+`s5cmd` is [included](https://anaconda.org/conda-forge/s5cmd ) in the [conda-forge]( https://conda-forge.org ) channel, and it can be downloaded through the [Conda](https://docs.conda.io/).
 
-Latest version built from github releases.
-Tap:
+> Installing `s5cmd` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+> ```
+> conda config --add channels conda-forge
+> conda config --set channel_priority strict
+> ```
+> 
+> Once the `conda-forge` channel has been enabled, `s5cmd` can be installed with `conda`:
+> 
+> ```
+> conda install s5cmd
+> ```
+ps.  Quoted from [s5cmd feedstock](https://github.com/conda-forge/s5cmd-feedstock). You can also find further instructions on its [README](https://github.com/conda-forge/s5cmd-feedstock/blob/main/README.md).
 
-```
-sudo port install lazygit
-```
+#### FreeBSD
 
-### Void Linux
-
-Packages for Void Linux are available in the distro repo
-
-They follow upstream latest releases
-
-```sh
-sudo xbps-install -S lazygit
-```
-
-### Scoop (Windows)
-
-You can install `lazygit` using [scoop](https://scoop.sh/). It's in the `extras` bucket:
-
-```sh
-# Add the extras bucket
-scoop bucket add extras
-
-# Install lazygit
-scoop install lazygit
-```
-
-### gah (Linux and Mac OS)
-
-You can install `lazygit` using [gah](https://github.com/marverix/gah/):
-
-```sh
-gah install lazygit
-```
-
-### Arch Linux
-
-Packages for Arch Linux are available via pacman and AUR (Arch User Repository).
-
-There are two packages. The stable one which is built with the latest release
-and the git version which builds from the most recent commit.
-
-- Stable: `sudo pacman -S lazygit`
-- Development: [https://aur.archlinux.org/packages/lazygit-git/](https://aur.archlinux.org/packages/lazygit-git/)
-
-Instruction of how to install AUR content can be found here:
-[https://wiki.archlinux.org/index.php/Arch_User_Repository](https://wiki.archlinux.org/index.php/Arch_User_Repository)
-
-### Fedora / Amazon Linux 2023 / CentOS Stream
-
-Packages for Fedora, Amazon Linux 2023 and CentOS Stream are available via
-[Copr](https://copr.fedorainfracloud.org/coprs/dejan/lazygit/) (Cool Other Package Repo).
-
-```sh
-sudo dnf copr enable dejan/lazygit
-sudo dnf install lazygit
-```
-
-These packages are built using the RPM spec file located here: [https://codeberg.org/dejan/rpm-lazygit](https://codeberg.org/dejan/rpm-lazygit)
-
-You should be able to build RPMs for Fedora 41 or older, and other Fedora derivatives using the
-SRPM (Source RPM) file that you can grab from the latest COPR build.
-
-#### Fedora / RHEL Derivatives (Terra)
-
-Packages for Fedora and RHEL derivatives are also available from the [Terra Repository](https://terra.fyralabs.com/).
-
-```sh
-sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
-sudo dnf install lazygit
-```
-
-(Install guide for Atomic/EL can be found on their [README](https://github.com/terrapkg/packages/pull/9747))
-
-Terra also has `lazygit-doc`, which contains the contents of the [docs](https://github.com/jesseduffield/lazygit/tree/master/docs) folder.
-
-### Solus Linux
-
-```sh
-sudo eopkg install lazygit
-```
-
-### Debian and Ubuntu
-
-For **Debian 13 "Trixie", Sid**, and later, or **Ubuntu 25.10 "Questing Quokka"** and later:
-
-```sh
-sudo apt install lazygit
-```
-
-For **Debian 12 "Bookworm", Ubuntu 25.04 "Plucky Puffin"** and earlier:
-
-```sh
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-tar xf lazygit.tar.gz lazygit
-sudo install lazygit -D -t /usr/local/bin/
-```
-
-Verify the correct installation of lazygit:
-
-```sh
-lazygit --version
-```
-
-### Funtoo Linux
-
-Funtoo Linux has an autogenerated lazygit package in [dev-kit](https://github.com/funtoo/dev-kit/tree/1.4-release/dev-vcs/lazygit):
-
-```sh
-sudo emerge dev-vcs/lazygit
-```
-
-### Gentoo Linux
-
-Lazygit is not (yet) in main Gentoo portage, however an ebuild is available in [GURU overlay](https://github.com/gentoo-mirror/guru/tree/master/dev-vcs/lazygit)
-
-You can either add the overlay to your system and install lazygit as usual:
-
-```sh
-sudo eselect repository enable guru
-sudo emaint sync -r guru
-sudo emerge dev-vcs/lazygit
-```
-
-### openSUSE
-
-The lazygit package is currently built in [devel:languages:go/lazygit](https://build.opensuse.org/package/show/devel:languages:go/lazygit).
-
-To install lazygit on openSUSE Tumbleweed run:
-
-```sh
-sudo zypper ar https://download.opensuse.org/repositories/devel:/languages:/go/openSUSE_Factory/devel:languages:go.repo
-sudo zypper ref && sudo zypper in lazygit
-```
-
-To install lazygit on openSUSE Leap run:
-
-```sh
-source /etc/os-release
-sudo zypper ar https://download.opensuse.org/repositories/devel:/languages:/go/$VERSION_ID/devel:languages:go.repo
-sudo zypper ref && sudo zypper in lazygit
-```
-
-### NixOS
-
-#### Using lazygit from nixpkgs
-
-On NixOS, lazygit is packaged with nix and distributed via nixpkgs.
-You can try lazygit without installing it with:
-
-```sh
-nix-shell -p lazygit
-# or with flakes enabled
-nix run nixpkgs#lazygit
-```
-
-Or you can add lazygit to your `configuration.nix` using the `environment.systemPackages` option.
-More details can be found via NixOS search [page](https://search.nixos.org/).
-
-#### Using the official lazygit flake
-
-This repository includes a nix flake that provides the latest development version and additional development tools:
-
-**Run lazygit directly from the repository:**
-
-```sh
-nix run github:jesseduffield/lazygit
-# or from a local clone
-nix run .
-```
-
-**Build lazygit from source:**
-
-```sh
-nix build github:jesseduffield/lazygit
-# or from a local clone
-nix build .
-```
-
-**Development environment:**
-For contributors, the flake provides a development shell with Go toolchain, development tools, and dependencies:
-
-```sh
-nix develop github:jesseduffield/lazygit
-# or from a local clone
-nix develop
-```
-
-The development shell includes:
-
-- Go toolchain
-- git and make
-- Proper environment variables for development
-
-**Using in other flakes:**
-The flake also provides an overlay for easy integration into other flake-based projects:
-
-```nix
-{
-  inputs.lazygit.url = "github:jesseduffield/lazygit";
-
-  outputs = { self, nixpkgs, lazygit }: {
-    # Use the overlay
-    nixpkgs.overlays = [ lazygit.overlays.default ];
-  };
-}
-```
-
-### Flox
-
-Lazygit can be installed into a Flox environment as follows.
-
-```sh
-flox install lazygit
-```
-
-More details about Flox can be found on [their website](https://flox.dev/).
-
-### FreeBSD
-
-```sh
-pkg install lazygit
-```
-
-### Termux
-
-```sh
-apt install lazygit
-```
-
-### Go
-
-```sh
-go install github.com/jesseduffield/lazygit@latest
-```
-
-Please note:
-If you get an error claiming that lazygit cannot be found or is not defined, you
-may need to add `~/go/bin` to your $PATH (macOS/Linux), or `%HOME%\go\bin`
-(Windows). Not to be mistaken for `C:\Go\bin` (which is for Go's own binaries,
-not apps like lazygit).
-
-### Chocolatey (Windows)
-
-You can install `lazygit` using [Chocolatey](https://chocolatey.org/):
-
-```sh
-choco install lazygit
-```
-
-### Winget (Windows 10 1709 or later)
-
-You can install `lazygit` using the `winget` command in the Windows Terminal with the following command:
-
-```powershell
-winget install -e --id=JesseDuffield.lazygit
-```
-
-### Manual
-
-You'll need to [install Go](https://golang.org/doc/install)
+On FreeBSD you can install s5cmd as a package:
 
 ```
-git clone https://github.com/jesseduffield/lazygit.git
-cd lazygit
-go install
+pkg install s5cmd
 ```
 
-You can also use `go run main.go` to compile and run in one go (pun definitely intended)
+or via ports:
+
+```
+cd /usr/ports/net/s5cmd
+make install clean
+```
+
+### Build from source
+
+You can build `s5cmd` from source if you have [Go](https://golang.org/dl/) 1.19+
+installed.
+
+    go install github.com/peak/s5cmd/v2@master
+
+⚠️ Please note that building from `master` is not guaranteed to be stable since
+development happens on `master` branch.
+
+### Docker
+
+#### Hub
+    $ docker pull peakcom/s5cmd
+    $ docker run --rm -v ~/.aws:/root/.aws peakcom/s5cmd <S3 operation>
+
+ℹ️ `/aws` directory is the working directory of the image. Mounting your current working directory to it allows you to run `s5cmd` as if it was installed in your system;
+
+    docker run --rm -v $(pwd):/aws -v ~/.aws:/root/.aws peakcom/s5cmd <S3 operation>
+
+#### Build
+    $ git clone https://github.com/peak/s5cmd && cd s5cmd
+    $ docker build -t s5cmd .
+    $ docker run --rm -v ~/.aws:/root/.aws s5cmd <S3 operation>
 
 ## Usage
 
-Call `lazygit` in your terminal inside a git repository.
+`s5cmd` supports multiple-level wildcards for all S3 operations. This is
+achieved by listing all S3 objects with the prefix up to the first wildcard,
+then filtering the results in-memory. For example, for the following command;
 
-```sh
-$ lazygit
+    s5cmd cp 's3://bucket/logs/2020/03/*' .
+
+first a `ListObjects` request is send, then the copy operation will be executed
+against each matching object, in parallel.
+
+
+### Specifying credentials
+
+`s5cmd` uses official AWS SDK to access S3. SDK requires credentials to sign
+requests to AWS. Credentials can be provided in a [variety of ways](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html):
+
+- Command line options `--profile` to use a named profile, `--credentials-file` flag to use the specified credentials file
+
+    ```sh
+    # Use your company profile in AWS default credential file
+    s5cmd --profile my-work-profile ls s3://my-company-bucket/
+
+    # Use your company profile in your own credential file
+    s5cmd --credentials-file ~/.your-credentials-file --profile my-work-profile ls s3://my-company-bucket/
+    ```
+
+- Environment variables
+
+    ```sh
+    # Export your AWS access key and secret pair
+    export AWS_ACCESS_KEY_ID='<your-access-key-id>'
+    export AWS_SECRET_ACCESS_KEY='<your-secret-access-key>'
+    export AWS_PROFILE='<your-profile-name>'
+    export AWS_REGION='<your-bucket-region>'
+
+    s5cmd ls s3://your-bucket/
+    ```
+
+- If `s5cmd` runs on an Amazon EC2 instance, EC2 IAM role
+- If `s5cmd` runs on EKS, Kube IAM role
+- Or, you can send requests anonymously with `--no-sign-request` option
+
+    ```sh
+    # List objects in a public bucket
+    s5cmd --no-sign-request ls s3://public-bucket/
+    ```
+
+### Region detection
+
+While executing the commands, `s5cmd` detects the region according to the following order of priority:
+
+1. `--source-region` or `--destination-region` flags of `cp` command.
+2. `AWS_REGION` environment variable.
+3. Region section of AWS profile.
+4. Auto detection from bucket region (via `HeadBucket` API call).
+5. `us-east-1` as default region.
+
+### Examples
+
+#### Check if a bucket exists
+
+    s5cmd head s3://bucket/
+
+#### Print a remote object's metadata
+
+    s5cmd head s3://bucket/object.gz
+
+#### Download a single S3 object
+
+    s5cmd cp s3://bucket/object.gz .
+
+#### Download multiple S3 objects
+
+Suppose we have the following objects:
+```
+s3://bucket/logs/2020/03/18/file1.gz
+s3://bucket/logs/2020/03/19/file2.gz
+s3://bucket/logs/2020/03/19/originals/file3.gz
 ```
 
-If you want, you can
-also add an alias for this with `echo "alias lg='lazygit'" >> ~/.zshrc` (or
-whichever rc file you're using).
+    s5cmd cp 's3://bucket/logs/2020/03/*' logs/
 
-### Keybindings
 
-You can check out the list of keybindings [here](/docs/keybindings).
+`s5cmd` will match the given wildcards and arguments by doing an efficient
+search against the given prefixes. All matching objects will be downloaded in
+parallel. `s5cmd` will create the destination directory if it is missing.
 
-### Changing Directory On Exit
-
-If you change repos in lazygit and want your shell to change directory into that repo on exiting lazygit, add this to your `~/.zshrc` (or other rc file):
+`logs/` directory content will look like:
 
 ```
-lg()
+$ tree
+.
+└── logs
+    ├── 18
+    │   └── file1.gz
+    └── 19
+        ├── file2.gz
+        └── originals
+            └── file3.gz
+
+4 directories, 3 files
+```
+
+ℹ️ `s5cmd` preserves the source directory structure by default. If you want to
+flatten the source directory structure, use the `--flatten` flag.
+
+    s5cmd cp --flatten 's3://bucket/logs/2020/03/*' logs/
+
+`logs/` directory content will look like:
+
+```
+$ tree
+.
+└── logs
+    ├── file1.gz
+    ├── file2.gz
+    └── file3.gz
+
+1 directory, 3 files
+```
+
+#### Upload a file to S3
+
+    s5cmd cp object.gz s3://bucket/
+
+ by setting server side encryption (*aws kms*) of the file:
+
+    s5cmd cp -sse aws:kms -sse-kms-key-id <your-kms-key-id> object.gz s3://bucket/
+
+ by setting Access Control List (*acl*) policy of the object:
+
+    s5cmd cp -acl bucket-owner-full-control object.gz s3://bucket/
+
+#### Upload multiple files to S3
+
+    s5cmd cp directory/ s3://bucket/
+
+Will upload all files at given directory to S3 while keeping the folder hierarchy
+of the source.
+
+#### Stream stdin to S3
+You can upload remote objects by piping stdin to `s5cmd`:
+
+    curl https://github.com/peak/s5cmd/ | s5cmd pipe s3://bucket/s5cmd.html
+
+Or you can compress the data before uploading:
+
+    gzip -c file | s5cmd pipe s3://bucket/file.gz
+
+#### Delete an S3 object
+
+    s5cmd rm s3://bucket/logs/2020/03/18/file1.gz
+
+#### Delete multiple S3 objects
+
+    s5cmd rm s3://bucket/logs/2020/03/19/*
+
+Will remove all matching objects:
+
+```
+s3://bucket/logs/2020/03/19/file2.gz
+s3://bucket/logs/2020/03/19/originals/file3.gz
+```
+
+`s5cmd` utilizes S3 delete batch API. If matching objects are up to 1000,
+they'll be deleted in a single request. However, it should be noted that commands such as
+
+    s5cmd rm s3://bucket-foo/object s3://bucket-bar/object
+
+are not supported by `s5cmd` and result in error (since we have 2 different buckets), as it is in odds with the benefit of performing batch delete requests. Thus, if in need, one can use `s5cmd run` mode for this case, i.e,
+
+    $ s5cmd run
+    rm s3://bucket-foo/object
+    rm s3://bucket-bar/object
+
+more details and examples on `s5cmd run` are presented in a [later section](./README.md#L293).
+
+#### Copy objects from S3 to S3
+
+`s5cmd` supports copying objects on the server side as well.
+
+    s5cmd cp 's3://bucket/logs/2020/*' s3://bucket/logs/backup/
+
+Will copy all the matching objects to the given S3 prefix, respecting the source
+folder hierarchy.
+
+⚠️ Copying objects (from S3 to S3) larger than 5GB is not supported yet. We have
+an [open ticket](https://github.com/peak/s5cmd/issues/29) to track the issue.
+
+#### Using Exclude and Include Filters
+`s5cmd` supports the `--exclude` and `--include` flags, which can be used to specify patterns for objects to be excluded or included in commands. 
+
+- The `--exclude` flag specifies objects that should be excluded from the operation. Any object that matches the pattern will be skipped.
+- The `--include` flag specifies objects that should be included in the operation. Only objects that match the pattern will be handled.
+- If both flags are used, `--exclude` has precedence over `--include`. This means that if an object URL matches any of the `--exclude` patterns, the object will be skipped, even if it also matches one of the `--include` patterns.
+- The order of the flags does not affect the results (unlike `aws-cli`).
+
+The command below will delete only objects that end with `.log`.
+
+    s5cmd rm --include "*.log" 's3://bucket/logs/2020/*'
+
+The command below will delete all objects except those that end with `.log` or `.txt`.
+
+    s5cmd rm --exclude "*.log" --exclude "*.txt" 's3://bucket/logs/2020/*'
+
+If you wish, you can use multiple flags, like below. It will download objects that start with `request` or end with `.log`.
+
+    s5cmd cp --include "*.log" --include "request*" 's3://bucket/logs/2020/*' .
+
+Using a combination of `--include` and `--exclude` also possible. The command below will only sync objects that end with `.log` or `.txt` but exclude those that start with `access_`. For example, `request.log`, and `license.txt` will be included, while `access_log.txt`, and `readme.md` are excluded.
+
+    s5cmd sync --include "*.log" --exclude "access_*" --include "*.txt" 's3://bucket/logs/*' .
+#### Select JSON object content using SQL
+
+`s5cmd` supports the `SelectObjectContent` S3 operation, and will run your
+[SQL query](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-glacier-select-sql-reference.html)
+against objects matching normal wildcard syntax and emit matching JSON records via stdout. Records
+from multiple objects will be interleaved, and order of the records is not guaranteed (though it's
+likely that the records from a single object will arrive in-order, even if interleaved with other
+records).
+
+    $ s5cmd select --compression GZIP \
+      --query "SELECT s.timestamp, s.hostname FROM S3Object s WHERE s.ip_address LIKE '10.%' OR s.application='unprivileged'" \
+      s3://bucket-foo/object/2021/*
+    {"timestamp":"2021-07-08T18:24:06.665Z","hostname":"application.internal"}
+    {"timestamp":"2021-07-08T18:24:16.095Z","hostname":"api.github.com"}
+
+At the moment this operation _only_ supports JSON records selected with SQL. S3 calls this
+lines-type JSON, but it seems that it works even if the records aren't line-delineated. YMMV.
+
+#### Count objects and determine total size
+
+    $ s5cmd du --humanize 's3://bucket/2020/*'
+
+    30.8M bytes in 3 objects: s3://bucket/2020/*
+
+#### Run multiple commands in parallel
+
+The most powerful feature of `s5cmd` is the commands file. Thousands of S3 and
+filesystem commands are declared in a file (or simply piped in from another
+process) and they are executed using multiple parallel workers. Since only one
+program is launched, thousands of unnecessary fork-exec calls are avoided. This
+way S3 execution times can reach a few thousand operations per second.
+
+    s5cmd run commands.txt
+
+or
+
+    cat commands.txt | s5cmd run
+
+`commands.txt` content could look like:
+
+```
+cp s3://bucket/2020/03/* logs/2020/03/
+
+# line comments are supported
+rm s3://bucket/2020/03/19/file2.gz
+
+# empty lines are OK too like above
+
+# rename an S3 object
+mv s3://bucket/2020/03/18/file1.gz s3://bucket/2020/03/18/original/file.gz
+```
+
+#### Sync
+`sync` command synchronizes S3 buckets, prefixes, directories and files between S3 buckets and prefixes as well.
+It compares files between source and destination, taking source files as **source-of-truth**;
+
+* copies files those do not exist in destination
+* copies files those exist in both locations if the comparison made with sync strategy allows it so
+
+It makes a one way synchronization from source to destination without modifying any of the source files and deleting any of the destination files (unless `--delete` flag has passed).
+
+Suppose we have following files;
+```
+   -  29 Sep 10:00 .
+5000  29 Sep 11:00 ├── favicon.ico
+ 300  29 Sep 10:00 ├── index.html
+  50  29 Sep 10:00 ├── readme.md
+  80  29 Sep 11:30 └── styles.css
+```
+
+```
+s5cmd ls s3://bucket/static/
+2021/09/29 10:00:01               300 index.html
+2021/09/29 11:10:01                10 readme.md
+2021/09/29 10:00:01                90 styles.css
+2021/09/29 11:10:01                10 test.html
+```
+running would;
+* copy `favicon.ico`
+  * file does not exist in destination.
+* copy `styles.css`
+  * source file is newer than to remote counterpart.
+* copy `readme.md`
+  * even though the source one is older, it's size differs from the destination one; assuming source file is the source of truth.
+```
+s5cmd sync . s3://bucket/static/
+
+cp favicon.ico s3://bucket/static/favicon.ico
+cp styles.css s3://bucket/static/styles.css
+cp readme.md s3://bucket/static/readme.md
+```
+
+Running with `--delete` flag would delete files those do not exist in the source;
+```
+s5cmd sync --delete . s3://bucket/static/
+
+rm s3://bucket/test.html
+cp favicon.ico s3://bucket/static/favicon.ico
+cp styles.css s3://bucket/static/styles.css
+cp readme.md s3://bucket/static/readme.md
+```
+
+It's also possible to use wildcards to sync only a subset of files.
+
+To sync only `.html` files in S3 bucket above to same local file system;
+
+```
+s5cmd sync 's3://bucket/static/*.html' .
+
+cp s3://bucket/prefix/index.html index.html
+cp s3://bucket/prefix/test.html test.html
+```
+
+We don't support syncing between 2 storage endpoints out of the box. The current solution is to sync remote objects to your local disk first, then sync your local files to the target remote storage. For example, if you'd like to sync S3 and Google Cloud Storage:
+
+```
+s5cmd sync 's3://s3-bucket/path/*' download_folder/
+
+s5cmd --endpoint-url <gcs-endpoint> sync 'download_folder/*' s3://gcs-bucket/path/
+```
+
+##### Strategy
+###### Default
+By default `s5cmd` compares files' both size **and** modification times, treating source files as **source of truth**. Any difference in size or modification time would cause `s5cmd` to copy source object to destination.
+
+mod time    |  size        |  should sync
+------------|--------------|-------------
+src > dst   |  src != dst  |  ✅
+src > dst   |  src == dst  |  ✅
+src <= dst  |  src != dst  |  ✅
+src <= dst  |  src == dst  |  ❌
+
+###### Size only
+With `--size-only` flag, it's possible to use the strategy that would only compare file sizes. Source treated as **source of truth** and any difference in sizes would cause `s5cmd` to copy source object to destination.
+
+mod time   |  size        |  should sync
+-----------|--------------|-------------
+src > dst  |  src != dst  |  ✅
+src > dst  |  src = dst   |  ❌
+src <= dst  |  src != dst  |  ✅
+src <= dst  |  src == dst  |  ❌
+
+### Dry run
+`--dry-run` flag will output what operations will be performed without actually
+carrying out those operations.
+
+    s3://bucket/pre/file1.gz
+    ...
+    s3://bucket/last.txt
+
+running
+
+    s5cmd --dry-run cp s3://bucket/pre/* s3://another-bucket/
+
+will output
+
+    cp s3://bucket/pre/file1.gz s3://another-bucket/file1.gz
+    ...
+    cp s3://bucket/pre/last.txt s3://anohter-bucket/last.txt
+
+however, those copy operations will not be performed. It is displaying what
+`s5cmd` will do when ran without `--dry-run`
+
+Note that `--dry-run` can be used with any operation that has a side effect, i.e.,
+cp, mv, rm, mb ...
+
+### S3 ListObjects API Backward Compatibility
+
+The `--use-list-objects-v1` flag will force using S3 ListObjectsV1 API. This
+flag is useful for services that do not support ListObjectsV2 API.
+
+```
+s5cmd --use-list-objects-v1 ls s3://bucket/
+```
+
+
+### Shell auto-completion
+
+Shell completion is supported for bash, pwsh (PowerShell) and zsh.
+
+Run `s5cmd --install-completion` to obtain the appropriate auto-completion script for your shell, note that `install-completion` does not install the auto-completion but merely gives the instructions to install. The name is kept as it is for backward compatibility.
+
+To actually enable auto-completion:
+####  in bash and zsh:
+ you should add auto-completion script to `.bashrc` and `.zshrc` file.
+#### in pwsh:
+you should save the autocompletion script to a file named `s5cmd.ps1` and add the full path of "s5cmd.ps1" file to profile file (which you can locate with `$profile`)
+
+
+Finally, restart your shell to activate the changes.
+
+> **Note**
+The environment variable `SHELL` must be accurate for the autocompletion to function properly. That is it should point to `bash` binary in bash, to `zsh` binary in zsh and to `pwsh` binary in PowerShell.
+
+
+> **Note**
+The autocompletion is tested with following versions of the shells: \
+***zsh*** 5.8.1 (x86_64-apple-darwin21.0) \
+GNU ***bash***, version 5.1.16(1)-release (x86_64-apple-darwin21.1.0) \
+***PowerShell*** 7.2.6 
+
+### Google Cloud Storage support
+
+`s5cmd` supports S3 API compatible services, such as GCS, Minio or your favorite
+object storage.
+
+    s5cmd --endpoint-url https://storage.googleapis.com ls
+
+or an alternative with environment variable
+
+    S3_ENDPOINT_URL="https://storage.googleapis.com" s5cmd ls
+
+    # or
+
+    export S3_ENDPOINT_URL="https://storage.googleapis.com"
+    s5cmd ls
+
+all variants will return your GCS buckets.
+
+`s5cmd` reads `.aws/credentials` to access Google Cloud Storage. Populate the `aws_access_key_id` and `aws_secret_access_key` fields in `.aws/credentials` with an HMAC key created using this [procedure](https://cloud.google.com/storage/docs/authentication/managing-hmackeys#create).
+
+`s5cmd` will use virtual-host style bucket resolving for S3, S3 transfer
+acceleration and GCS. If a custom endpoint is provided, it'll fallback to
+path-style.
+
+### Retry logic
+
+`s5cmd` uses an exponential backoff retry mechanism for transient or potential
+server-side throttling errors. Non-retriable errors, such as `invalid
+credentials`, `authorization errors` etc, will not be retried. By default,
+`s5cmd` will retry 10 times for up to a minute. Number of retries are adjustable
+via `--retry-count` flag.
+
+ℹ️ Enable debug level logging for displaying retryable errors.
+
+### Integrity Verification
+`s5cmd` verifies the integrity of files uploaded to Amazon S3 by checking the `Content-MD5` and `X-Amz-Content-Sha256` headers. These headers are added by the AWS SDK for both standard and multipart uploads.
+
+* `Content-MD5` is a checksum of the file's contents, calculated using the `MD5` algorithm.
+* `X-Amz-Content-Sha256` is a checksum of the file's contents, calculated using the `SHA256` algorithm.
+
+If the checksums in these headers do not match the checksum of the file that was actually uploaded, then `s5cmd` will fail the upload. This helps to ensure that the file was not corrupted during transmission.
+
+If the checksum calculated by S3 does not match the checksums provided in the `Content-MD5` and `X-Amz-Content-Sha256` headers, S3 will not store the object. Instead, it will return an error message to `s5cmd` with the error code `InvalidDigest` for an `MD5` mismatch or `XAmzContentSHA256Mismatch` for a `SHA256` mismatch.
+
+| Error Code | Description |
+|---|---|
+| `InvalidDigest` | The checksum provided in the `Content-MD5` header does not match the checksum calculated by S3. |
+| `XAmzContentSHA256Mismatch` | The checksum provided in the `X-Amz-Content-Sha256` header does not match the checksum calculated by S3. |
+
+If `s5cmd` receives either of these error codes, it will not retry to upload the object again and exit code will be `1`.
+
+If the `MD5` checksum mismatches, you will see an error like the one below.
+
+    ERROR "cp file.log s3://bucket/file.log": InvalidDigest: The Content-MD5 you specified was invalid. status code: 400, request id: S3TR4P2E0A2K3JMH7, host id: XTeMYKd2KECOHWk5S
+
+If the `SHA256` checksum mismatches, you will see an error like the one below.
+
+    ERROR "cp file.log s3://bucket/file.log": XAmzContentSHA256Mismatch: The provided 'x-amz-content-sha256' header does not match what was computed. status code: 400, request id: S3TR4P2E0A2K3JMH7, host id: XTeMYKd2KECOHWk5S
+
+`aws-cli` and `s5cmd` are both command-line tools that can be used to interact with Amazon S3. However, there are some differences between the two tools in terms of how they verify the integrity of data uploaded to S3.
+
+* **Number of retries:** `aws-cli` will retry up to five times to upload a file, while `s5cmd` will not retry.
+* **Checksums:** If you enable `Signature Version 4` in your `~/.aws/config` file, `aws-cli` will only check the `SHA256` checksum of a file  while `s5cmd` will check both the `MD5` and `SHA256` checksums.
+
+**Sources:**
+- [AWS Go SDK](https://github.com/aws/aws-sdk-go/blob/b75b2a7b3cb40ece5774ed07dde44903481a2d4d/service/s3/customizations.go#L56)
+- [AWS CLI Docs](https://docs.aws.amazon.com/cli/latest/topic/s3-faq.html)
+- [AWS S3 Docs](https://aws.amazon.com/getting-started/hands-on/amazon-s3-with-additional-checksums/)
+
+## Using wildcards
+
+On some shells, like zsh, the `*` character gets treated as a file globbing
+wildcard, which causes unexpected results for `s5cmd`. You might see an output
+like:
+
+```
+zsh: no matches found
+```
+
+If that happens, you need to wrap your wildcard expression in single quotes, like:
+
+```
+s5cmd cp '*.gz' s3://bucket/
+```
+
+## Output
+
+`s5cmd` supports both structured and unstructured outputs.
+* unstructured output
+
+```shell
+$ s5cmd cp s3://bucket/testfile .
+
+cp s3://bucket/testfile testfile
+```
+
+```shell
+$ s5cmd cp --no-clobber s3://somebucket/file.txt file.txt
+
+ERROR "cp s3://somebucket/file.txt file.txt": object already exists
+```
+
+* If `--json` flag is provided:
+
+```json
 {
-    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
-
-    lazygit "$@"
-
-    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
-            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
-            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
-    fi
+    "operation": "cp",
+    "success": true,
+    "source": "s3://bucket/testfile",
+    "destination": "testfile",
+    "object": "[object]"
+}
+{
+    "operation": "cp",
+    "job": "cp s3://somebucket/file.txt file.txt",
+    "error": "'cp s3://somebucket/file.txt file.txt': object already exists"
 }
 ```
 
-Then `source ~/.zshrc` and from now on when you call `lg` and exit you'll switch directories to whatever you were in inside lazygit. To override this behaviour you can exit using `shift+Q` rather than just `q`.
+## Configuring Concurrency
 
-### Undo/Redo
+### numworkers
 
-See the [docs](/docs/Undoing.md)
+`numworkers` is a global option that sets the size of the global worker pool. Default value of `numworkers` is [256](https://github.com/peak/s5cmd/blob/master/command/app.go#L18).
+Commands such as `cp`, `select` and `run`, which can benefit from parallelism use this worker pool to execute tasks. A task can be an upload, a download or anything in a [`run` file](https://github.com/peak/s5cmd/blob/master/command/app.go#L18).
 
-## Configuration
+For example, if you are uploading 100 files to an S3 bucket and the `--numworkers` is set to 10, then `s5cmd` will limit the number of files concurrently uploaded to 10.
 
-Check out the [configuration docs](docs/Config.md).
+```
+s5cmd --numworkers 10 cp '/Users/foo/bar/*' s3://mybucket/foo/bar/
+```
 
-### Custom Pagers
+### concurrency
 
-See the [docs](docs/Custom_Pagers.md)
+`concurrency` is a `cp` command option. It sets the number of parts that will be uploaded or downloaded in parallel for a single file.
+This parameter is used by the AWS Go SDK. Default value of `concurrency` is `5`.
 
-### Custom Commands
+`numworkers` and `concurrency` options can be used together:
 
-If lazygit is missing a feature, there's a good chance you can implement it yourself with a custom command!
+```
+s5cmd --numworkers 10 cp --concurrency 10 '/Users/foo/bar/*' s3://mybucket/foo/bar/
+```
 
-See the [docs](docs/Custom_Command_Keybindings.md)
+If you have a few, large files to download, setting `--numworkers` to a very high value will not affect download speed. In this scenario setting `--concurrency` to a higher value may have a better impact on the download speed.
 
-### Git flow support
+## Benchmarks
+Some benchmarks regarding the performance of `s5cmd` are introduced below. For more
+details refer to this [post](https://medium.com/@joshua_robinson/s5cmd-for-high-performance-object-storage-7071352cc09d)
+which is the source of the benchmarks to be presented.
 
-Lazygit supports [Gitflow](https://github.com/nvie/gitflow) if you have it installed. To understand how the Gitflow model works check out Vincent Driessen's original [post](https://nvie.com/posts/a-successful-git-branching-model/) explaining it. To view Gitflow options from within Lazygit, press `i` from within the branches view.
+*Upload/download of single large file*
 
-## Contributing
+<img src="./doc/benchmark1.png" alt="get/put performance graph" height="75%" width="75%">
 
-We love your input! Please check out the [contributing guide](CONTRIBUTING.md).
-For contributor discussion about things not better discussed here in the repo, join the [discord channel](https://discord.gg/ehwFt2t4wt)
+*Uploading large number of small-sized files*
+
+<img src="./doc/benchmark2.png" alt="multi-object upload performance graph" height="75%" width="75%">
+
+*Performance comparison on different hardware*
+
+<img src="./doc/benchmark3.png" alt="s3 upload speed graph" height="75%" width="75%">
+
+*So, where does all this speed come from?*
+
+There are mainly two reasons for this:
+- It is written in Go, a statically compiled language designed to make development
+of concurrent systems easy and make full utilization of multi-core processors.
+- *Parallelization.* `s5cmd` starts out with concurrent worker pools and parallelizes
+workloads as much as possible while trying to achieve maximum throughput.
+
+## performance regression tests
+
+[`bench.py`](benchmark/bench.py) script can be used to compare performance of two different s5cmd builds. Refer to this [readme](benchmark/README.md) file for further details.
+
+# Advanced Usage
+
+Some of the advanced usage patterns provided below are inspired by the following [article](https://medium.com/@joshua_robinson/s5cmd-hits-v1-0-and-intro-to-advanced-usage-37ad02f7e895) (thank you! [@joshuarobinson](https://github.com/joshuarobinson))
+
+## Integrate s5cmd operations with Unix commands
+Assume we have a set of objects on S3, and we would like to list them in sorted fashion according to object names.
+
+    $ s5cmd ls s3://bucket/reports/ | sort -k 4
+    2020/08/17 09:34:33              1364 antalya.csv
+    2020/08/17 09:34:33                 0 batman.csv
+    2020/08/17 09:34:33             23114 istanbul.csv
+    2020/08/17 09:34:33             26154 izmir.csv
+    2020/08/17 09:34:33               112 samsun.csv
+    2020/08/17 09:34:33             12552 van.csv
+
+For a more practical scenario, let's say we have an [avocado prices](https://www.kaggle.com/neuromusic/avocado-prices) dataset, and we would like to take a peek at the few lines of the data by fetching only the necessary bytes.
+
+    $ s5cmd cat s3://bucket/avocado.csv.gz | gunzip | xsv slice --len 5 | xsv table
+        Date        AveragePrice  Total Volume  4046     4225       4770   Total Bags  Small Bags  Large Bags  XLarge Bags  type          year  region
+    0   2015-12-27  1.33          64236.62      1036.74  54454.85   48.16  8696.87     8603.62     93.25       0.0          conventional  2015  Albany
+    1   2015-12-20  1.35          54876.98      674.28   44638.81   58.33  9505.56     9408.07     97.49       0.0          conventional  2015  Albany
+    2   2015-12-13  0.93          118220.22     794.7    109149.67  130.5  8145.35     8042.21     103.14      0.0          conventional  2015  Albany
+    3   2015-12-06  1.08          78992.15      1132.0   71976.41   72.58  5811.16     5677.4      133.76      0.0          conventional  2015  Albany
+    4   2015-11-29  1.28          51039.6       941.48   43838.39   75.78  6183.95     5986.26     197.69      0.0          conventional  2015  Albany
 
 
+## Beast Mode s5cmd
 
-Check out this [video](https://www.youtube.com/watch?v=kNavnhzZHtk) walking through the creation of a small feature in lazygit if you want an idea of where to get started.
+`s5cmd` allows to pass in some file, containing list of operations to be performed, as an argument to the `run` command as illustrated in the [above](./README.md#L293) example. Alternatively, one can pipe in commands into
+the `run:`
 
-### Debugging Locally
+    BUCKET=s5cmd-test; s5cmd ls s3://$BUCKET/*test | grep -v DIR | awk ‘{print $NF}’
+    | xargs -I {} echo “cp s3://$BUCKET/{} /local/directory/” | s5cmd run
 
-Run `lazygit --debug` in one terminal tab and `lazygit --logs` in another to view the program and its log output side by side
+The above command performs two `s5cmd` invocations; first, searches for files with *test* suffix and then creates a *copy to local directory* command for each matching file and finally, pipes in those into the ` run.`
 
-## Donate
+Let's examine another usage instance, where we migrate files older than
+30 days to a cloud object storage:
 
-If you would like to support the development of lazygit, consider [sponsoring me](https://github.com/sponsors/jesseduffield) (github is matching all donations dollar-for-dollar for 12 months)
+    find /mnt/joshua/nachos/ -type f -mtime +30 | awk '{print "mv "$1" s3://joshuarobinson/backup/"$1}'
+    | s5cmd run
 
-## FAQ
+It is worth to mention that, `run` command should not be considered as a *silver bullet* for all operations. For example, assume we want to remove the following objects:
 
-### What do the commit colors represent?
+    s3://bucket/prefix/2020/03/object1.gz
+    s3://bucket/prefix/2020/04/object1.gz
+    ...
+    s3://bucket/prefix/2020/09/object77.gz
 
-- Green: the commit is included in the master branch
-- Yellow: the commit is not included in the master branch
-- Red: the commit has not been pushed to the upstream branch
+Rather than executing
 
-## Shameless Plug
+    rm s3://bucket/prefix/2020/03/object1.gz
+    rm s3://bucket/prefix/2020/04/object1.gz
+    ...
+    rm s3://bucket/prefix/2020/09/object77.gz
 
-If you want to see what I (Jesse) am up to in terms of development, follow me on
-[twitter](https://twitter.com/DuffieldJesse) or check out my [blog](https://jesseduffield.com/)
+with `run` command, it is better to just use
 
-## Alternatives
+    rm s3://bucket/prefix/2020/0*/object*.gz
 
-If you find that lazygit doesn't quite satisfy your requirements, these may be a better fit:
+the latter sends single delete request per thousand objects, whereas using the former approach
+sends a separate delete request for each subcommand provided to `run.` Thus, there can be a
+significant runtime difference between those two approaches.
 
-- [GitUI](https://github.com/Extrawurst/gitui)
-- [tig](https://github.com/jonas/tig)
-- [GitArbor TUI](https://github.com/cadamsdev/gitarbor-tui)
+# LICENSE
+
+MIT. See [LICENSE](https://github.com/peak/s5cmd/blob/master/LICENSE).

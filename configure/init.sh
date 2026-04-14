@@ -7,4 +7,5 @@ mkdir -p "$(lazysetup_state_home)"
 mkdir -p "$(lazysetup_cache_home)"
 
 rc_append_line ~/.bashrc 'export PATH="$HOME/.local/bin:$PATH"'
+rc_append_line ~/.bashrc 'export PATH="$HOME/.bun/bin:$PATH"'
 rc_append_line ~/.bashrc 'export COLORTERM=truecolor'
