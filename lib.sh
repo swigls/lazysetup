@@ -60,6 +60,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/critique.sh"
   "configure/git.sh"
   # uv
+  "install/rust.sh"
   "install/uv.sh"
   "install/npm.sh"
   "install/zellij.sh"
