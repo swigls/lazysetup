@@ -67,6 +67,7 @@ LAZY_INSTALL_SCRIPTS=(
   "install/helix.sh"
   "install/gitui.sh"
   "install/s5cmd.sh"
+  "configure/zellij.sh"
   "configure/helix.sh"
 )
 function _lazycd {
